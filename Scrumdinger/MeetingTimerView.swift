@@ -1,81 +1,55 @@
-/*
- 计时器面板中间的计时器。
- */
-
 import SwiftUI
-let timer = Timer
-    .publish(every: 1, on: .main, in: .common)
-    .autoconnect()
- 
+
 struct MeetingTimerView: View {
     var scrumColor: Color
-    @State var counter: Int = 0
-    var countTo: Int // should use data from our object; seconds
-
-    var body: some View {
-        VStack{
-            ZStack{
-                Circle()
-                    .strokeBorder(lineWidth: 24, antialiased: true)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .overlay(
-                        Circle().trim(from:0, to: progress())
-                            .stroke(
-                                style: StrokeStyle(
-                                    lineWidth: 12,
-                                    lineCap: .round,
-                                    lineJoin:.round
-                                )
-                            )
-                            .foregroundColor(scrumColor)
-                            .animation(
-                                .easeInOut(duration: 0.2)
-                            )
-                    )
-                 
-                Clock(counter: counter, countTo: countTo)
-            }
-            .padding()
-            
-        }.onReceive(timer) { time in
-            if (self.counter < self.countTo) {
-                self.counter += 1
-            }
-        }
-    }
-     
-    func completed() -> Bool {
-        return progress() == 1
-    }
-     
-    func progress() -> CGFloat {
-        return (CGFloat(counter) / CGFloat(countTo))
-    }
-}
- 
-struct Clock: View {
-    var counter: Int
-    var countTo: Int
-     
+    @ObservedObject var scrumTimer: ScrumTimer
+    let fillColor : Color = Color(
+        red: 187/255, green: 226/255, blue: 236/255)
     var body: some View {
         VStack {
-            Text(counterToMinutes())
-                .font(.system(size: 60))
-                .fontWeight(.black)
+            ZStack {
+                // Background Circle
+                Circle()
+                    .stroke(lineWidth: 24)
+                    .opacity(0.3)
+                    .foregroundColor(fillColor)
+                    .frame(width: 250, height: 250)
+
+                // Progress Fill Circle - Adjusted for countdown
+                Circle()
+                    .trim(from: 0, to: progress())
+                    .stroke(scrumColor, lineWidth: 24)
+                    .frame(width: 250, height: 250)
+                    .rotationEffect(Angle(degrees: -90))
+                    .animation(.linear, value: progress())
+                
+                // Displaying the remaining time in mm:ss format
+                Text(timeRemainingFormatted)
+                    .font(.system(size: 60))
+                    .fontWeight(.black)
+            }
         }
     }
-     
-    func counterToMinutes() -> String {
-        let currentTime = countTo - counter
-        let seconds = currentTime % 60
-        let minutes = Int(currentTime / 60)
-         
-        return "\(minutes):\(seconds < 10 ? "0" : "")\(seconds)"
+
+    // Calculate progress for countdown
+    private func progress() -> CGFloat {
+        let totalSeconds = CGFloat(scrumTimer.lengthInMinutes * 60)
+        let elapsed = CGFloat(scrumTimer.secondsElapsed)
+        return (totalSeconds - elapsed) / totalSeconds
+    }
+
+    // Format remaining time as mm:ss
+    private var timeRemainingFormatted: String {
+        let remainingSeconds = scrumTimer.secondsRemaining
+        let minutes = remainingSeconds / 60
+        let seconds = remainingSeconds % 60
+        return "\(minutes):\(String(format: "%02d", seconds))"
     }
 }
- 
-struct MeetingTimerView_Preview: PreviewProvider {
+
+// Preview Provider
+struct MeetingTimerView_Previews: PreviewProvider {
     static var previews: some View {
-        MeetingTimerView(scrumColor: Color("Design"), countTo: 120) // placeholder
+        MeetingTimerView(scrumColor: Color.blue, scrumTimer: ScrumTimer(lengthInMinutes: 2))
     }
 }
