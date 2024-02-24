@@ -13,14 +13,20 @@ struct ScrumsView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var isPresented = false
     @State private var newScrumData = DailyScrum.Data()
+    @State private var activeMeetingScrumID: DailyScrum.ID? = nil // To control MeetingView presentation
     let saveAction: () -> Void
+    
     var body: some View {
         List {
             ForEach(scrums) { scrum in
-                NavigationLink(destination: DetailView(scrum: binding(for: scrum))) {
-                    CardView(scrum: scrum)
-                }
+                // Modified CardView to include navigation logic
+                CardView(scrum: scrum, navigateToMeeting: {
+                    activeMeetingScrumID = scrum.id
+                }, navigateToDetail: {
+                    // Trigger navigation to DetailView programmatically
+                })
                 .listRowBackground(scrum.color)
+                .background(NavigationLink("", destination: DetailView(scrum: binding(for: scrum)), isActive: .constant(activeMeetingScrumID == scrum.id)).hidden())
             }
         }
         .navigationTitle("Goal Tracking")
@@ -44,6 +50,17 @@ struct ScrumsView: View {
         }
         .onChange(of: scenePhase) { phase in
             if phase == .inactive { saveAction() }
+        }
+        .sheet(isPresented: Binding<Bool>(
+            get: { self.activeMeetingScrumID != nil },
+            set: { _ in self.activeMeetingScrumID = nil }
+        )) {
+            // Assuming MeetingView requires a scrum to initialize
+            if let activeMeetingScrumID = activeMeetingScrumID, let scrum = scrums.first(where: { $0.id == activeMeetingScrumID }) {
+                MeetingView(scrum: binding(for: scrum))
+            } else {
+                Text("Error: Scrum not found.")
+            }
         }
     }
 
