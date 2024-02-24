@@ -17,7 +17,7 @@ struct MeetingTimerView: View {
             ZStack{
                 Circle()
                     .strokeBorder(lineWidth: 24, antialiased: true)
-                    .frame(width: 250, height: 250)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .overlay(
                         Circle().trim(from:0, to: progress())
                             .stroke(
@@ -35,6 +35,8 @@ struct MeetingTimerView: View {
                  
                 Clock(counter: counter, countTo: countTo)
             }
+            .padding()
+            
         }.onReceive(timer) { time in
             if (self.counter < self.countTo) {
                 self.counter += 1

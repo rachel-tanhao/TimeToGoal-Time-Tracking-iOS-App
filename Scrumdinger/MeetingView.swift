@@ -12,14 +12,22 @@ struct MeetingView: View {
     @State private var isRecording = false
     private let speechRecognizer = SpeechRecognizer()
     var player: AVPlayer { AVPlayer.sharedDingPlayer }
+    
+    
     var body: some View {
         ZStack {
+            // background
             RoundedRectangle(cornerRadius: 16.0)
                 .fill(scrum.color)
-            VStack(spacing: 20){
+            
+            VStack {
                 MeetingHeaderView(secondsElapsed: scrumTimer.secondsElapsed, secondsRemaining: scrumTimer.secondsRemaining, scrumColor: scrum.color)
-                MeetingTimerView(scrumColor: scrum.color, countTo: scrumTimer.secondsRemaining) // placeholder
+                
+                MeetingTimerView(scrumColor: scrum.color, countTo: scrumTimer.secondsRemaining)
+                
+                // MeetingFooterView(speakers: scrumTimer.speakers, skipAction: scrumTimer.skipSpeaker)
             }
+
         }
         .padding()
         .foregroundColor(scrum.color.accessibleFontColor)
@@ -40,6 +48,7 @@ struct MeetingView: View {
             let newHistory = History(attendees: scrum.attendees, lengthInMinutes: scrumTimer.secondsElapsed / 60, transcript: transcript, lengthInHours: scrumTimer.secondsElapsed / 3600)
             scrum.history.insert(newHistory, at: 0)
         }
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
