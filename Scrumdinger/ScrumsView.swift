@@ -7,6 +7,7 @@ import SwiftUI
 struct ScrumsView: View {
     @Binding var scrums: [DailyScrum]
     @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject var taskList: TaskList
     @State private var isPresented = false
     @State private var newScrumData = DailyScrum.Data()
     @State private var activeMeetingScrumID: DailyScrum.ID? = nil
@@ -55,29 +56,24 @@ struct ScrumsView: View {
             DataView().environmentObject(TaskList.shared)
         }
         
-//        EditView(scrumData: .constant(DailyScrum.data[0].data))
-
         // For Toolbar right item: add a new timer
         .sheet(isPresented: $isPresented) {
-            // Check if we have a selectedScrumID and fetch the corresponding DailyScrum
-            if let selectedScrumID = selectedScrumID, let scrumIndex = scrums.firstIndex(where: { $0.id == selectedScrumID }) {
-                let selectedScrum = scrums[scrumIndex]
+            NavigationView {
+                EditView(scrumData: $newScrumData, corrTaskId: $newScrumData.corrTaskId)
+                    .navigationBarItems(leading: Button("Dismiss") {
+                        isPresented = false
+                    }, trailing: Button("Add") {
+                        let newScrum = DailyScrum(title: newScrumData.title, attendees: newScrumData.attendees,
+                                                  lengthInMinutes: Int(newScrumData.lengthInMinutes), color: newScrumData.color,
+                                                  lengthInHours: Int(newScrumData.lengthInHours),
+                                                  progressHours: Int(newScrumData.progressHours),
+                                                  category: newScrumData.category,
+                                                  corrTaskId: newScrumData.corrTaskId
+                        )
+                        scrums.append(newScrum)
+                        isPresented = false
+                    })
 
-                
-                NavigationView {
-                    EditView(scrumData: $newScrumData)
-                        .navigationBarItems(leading: Button("Dismiss") {
-                            isPresented = false
-
-                        }, trailing: Button("Save") {
-                            scrums[scrumIndex].update(from: newScrumData) // Update the scrum with new data
-                            isPresented = false
-                            saveAction() // Call save action
-                        })
-                }
-            } else {
-                // Fallback content in case no scrum is selected or found
-                Text("Error: Scrum not found or not selected.")
             }
         }
         
@@ -108,7 +104,7 @@ struct ScrumsView: View {
 struct ScrumsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ScrumsView(scrums: .constant(DailyScrum.data), saveAction: {})
+            ScrumsView(scrums: .constant(DailyScrum.data), saveAction: {}).environmentObject(TaskList.shared)
         }
     }
 }

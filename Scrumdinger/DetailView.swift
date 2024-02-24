@@ -8,6 +8,8 @@ struct DetailView: View {
     @Binding var scrum: DailyScrum
     @State private var data: DailyScrum.Data = DailyScrum.Data()
     @State private var isPresented = false
+    @EnvironmentObject var taskList: TaskList // Ensure you have access to your TaskList
+
     var body: some View {
         List {
             Section(header: Text("My Goal")) {
@@ -32,13 +34,22 @@ struct DetailView: View {
                 }
                 .accessibilityElement(children: .ignore)
             }
-            Section(header: Text("Attendees")) {
-                ForEach(scrum.attendees, id: \.self) { attendee in
-                    Label(attendee, systemImage: "person")
-                        .accessibilityLabel(Text("Person"))
-                        .accessibilityValue(Text(attendee))
+            // Add a new section for the associated task
+            Section(header: Text("Associated Task")) {
+                if let corrTaskId = scrum.corrTaskId, let task = taskList.tasks.first(where: { $0.id == corrTaskId }) {
+                    Label(task.name, systemImage: "checkmark.circle")
+                    Text("Accumulated Time: \(task.accumTime) minutes")
+                } else {
+                    Text("No task associated")
                 }
             }
+//            Section(header: Text("Attendees")) {
+//                ForEach(scrum.attendees, id: \.self) { attendee in
+//                    Label(attendee, systemImage: "person")
+//                        .accessibilityLabel(Text("Person"))
+//                        .accessibilityValue(Text(attendee))
+//                }
+//            }
             Section(header: Text("History")) {
                 if scrum.history.isEmpty {
                     Label("No meetings yet", systemImage: "calendar.badge.exclamationmark")
@@ -63,7 +74,7 @@ struct DetailView: View {
         .navigationTitle(scrum.title)
         .fullScreenCover(isPresented: $isPresented) {
             NavigationView {
-                EditView(scrumData: $data)
+                EditView(scrumData: $data, corrTaskId: $scrum.corrTaskId)
                     .navigationTitle(scrum.title)
                     .navigationBarItems(leading: Button("Cancel") {
                         isPresented = false
@@ -79,7 +90,7 @@ struct DetailView: View {
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            DetailView(scrum: .constant(DailyScrum.data[0]))
+            DetailView(scrum: .constant(DailyScrum.data[0])).environmentObject(TaskList.shared)
         }
     }
 }

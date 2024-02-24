@@ -39,7 +39,7 @@ struct DataView: View {
                                     .font(.subheadline)
                             }
                             .padding()
-                            .background(Color.secondary.opacity(0.1))
+                            .background(Color.orange.opacity(0.2))
                             .cornerRadius(10)
                             .onTapGesture {
                                 self.selectedTaskForEditing = task // Set the task to be edited
@@ -80,8 +80,8 @@ struct DataView: View {
                 }
             }
 
-
         }
+        
     }
 }
 

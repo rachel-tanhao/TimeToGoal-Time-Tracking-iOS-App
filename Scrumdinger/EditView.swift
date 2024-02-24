@@ -2,7 +2,10 @@ import SwiftUI
 
 struct EditView: View {
     @Binding var scrumData: DailyScrum.Data
-    
+    @ObservedObject var taskList = TaskList.shared // Use your shared TaskList
+    @Binding var corrTaskId: UUID? // Binding to the Scrum's corrTaskId
+    @State private var showingTaskCreation = false // To show/hide task creation sheet
+
     var body: some View {
         List {
             Section(header: Text("Time To Goal")) {
@@ -20,6 +23,30 @@ struct EditView: View {
                     .accessibilityLabel(Text("Color picker"))
 
             }
+
+            Section(header: Text("Select Task")) {
+                ForEach(taskList.tasks) { task in
+                    Button(action: {
+                        self.corrTaskId = task.id
+                    }) {
+                        HStack {
+                            Text(task.name)
+                            Spacer()
+                            if corrTaskId == task.id {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+                Button("Create New Task") {
+                    self.showingTaskCreation = true
+                }
+            }
+        }
+        .sheet(isPresented: $showingTaskCreation) {
+            TaskCreationView(isPresented: $showingTaskCreation, selectedTaskId: $corrTaskId)
+                .environmentObject(taskList)
+
         }
         .listStyle(InsetGroupedListStyle())
     }
@@ -27,6 +54,8 @@ struct EditView: View {
 
 struct EditView_Previews: PreviewProvider {
     static var previews: some View {
-        EditView(scrumData: .constant(DailyScrum.data[0].data))
+        EditView(scrumData: .constant(DailyScrum.data[0].data), corrTaskId: .constant(nil))
+            .environmentObject(TaskList.shared)
     }
 }
+
