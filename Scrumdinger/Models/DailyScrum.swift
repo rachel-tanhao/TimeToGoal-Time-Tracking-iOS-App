@@ -13,6 +13,7 @@ struct DailyScrum: Identifiable, Codable {
     var color: Color
     var history: [History]
     var category: String
+    var corrTaskId: UUID?
 
 
     // CodingKeys enum to match the JSON keys
@@ -20,7 +21,7 @@ struct DailyScrum: Identifiable, Codable {
         case id, title, attendees, lengthInMinutes, color, history, lengthInHours,progressHours, category
     }
     
-    init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = [], lengthInHours: Int, progressHours: Int, category:String) {
+    init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = [], lengthInHours: Int, progressHours: Int, category:String, corrTaskId: UUID? = nil) {
         self.id = id
         self.title = title
         self.attendees = attendees
@@ -30,6 +31,7 @@ struct DailyScrum: Identifiable, Codable {
         self.lengthInHours = lengthInHours
         self.progressHours = progressHours
         self.category = category
+        self.corrTaskId = corrTaskId // Initialize with provided value or nil
     }
     
     init(from decoder: Decoder) throws {
@@ -72,10 +74,11 @@ extension DailyScrum {
         var lengthInHours: Double = 5.0
         var progressHours: Double = 3.0
         var category: String = ""
+        var corrTaskId: UUID?
     }
 
     var data: Data {
-        return Data(title: title, attendees: attendees, lengthInMinutes: Double(lengthInMinutes), color: color, lengthInHours: Double(lengthInHours), progressHours: Double(progressHours), category: category)
+        return Data(title: title, attendees: attendees, lengthInMinutes: Double(lengthInMinutes), color: color, lengthInHours: Double(lengthInHours), progressHours: Double(progressHours), category: category, corrTaskId: corrTaskId)
     }
 
     mutating func update(from data: Data) {
@@ -86,5 +89,6 @@ extension DailyScrum {
         lengthInHours = Int(data.lengthInHours)
         progressHours = Int(data.progressHours)
         category = data.category
+        corrTaskId = data.corrTaskId
     }
 }
