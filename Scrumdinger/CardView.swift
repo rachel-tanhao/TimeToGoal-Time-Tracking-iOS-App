@@ -11,34 +11,37 @@ struct CardView: View {
     
     var body: some View {
         HStack() {
+            
+            // task details
             VStack(alignment: .leading) {
                 Text(scrum.title)
                     .font(.headline)
-                Spacer()
+                    .padding(.bottom, 2)
                 HStack {
-                    Label("\(scrum.attendees.count)", systemImage: "person.3")
+                    Image(systemName: "clock") // System image for the clock
+                    Text("\(scrum.lengthInMinutes) mins to goal") // Here, "mins" is added directly to the text
                     Spacer()
-                    Label("\(scrum.lengthInMinutes)", systemImage: "clock")
                 }
                 .font(.caption)
             }
-            .padding()
             .contentShape(Rectangle())
             .onTapGesture {
                 navigateToDetail()
             }
             
+            // timer button
             Button(action: navigateToMeeting) {
                 Image(systemName: "play.fill")
                     .foregroundColor(.white)
-                    .padding()
+                    .padding(12)
                     .background(Color.green)
-                    .cornerRadius(15)
+                    .cornerRadius(17)
             }
             .buttonStyle(PlainButtonStyle())
         }
         .foregroundColor(scrum.color.accessibleFontColor)
         .background(scrum.color)
+        .padding(10)
     }
 }
 

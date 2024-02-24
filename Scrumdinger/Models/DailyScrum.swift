@@ -24,9 +24,9 @@ struct DailyScrum: Identifiable, Codable {
 extension DailyScrum {
     static var data: [DailyScrum] {
         [
-            DailyScrum(title: "根据功能修改前端", attendees: ["Cathy", "Daisy", "Simon", "Jonathan"], lengthInMinutes: 2, color: Color("Design")),
-            DailyScrum(title: "改写后端逻辑、实现功能", attendees: ["Katie", "Gray", "Euna", "Luis", "Darla"], lengthInMinutes: 4, color: Color("App Dev")),
-            DailyScrum(title: "调试、打包成APP", attendees: ["Chella", "Chris", "Christina", "Eden", "Karla", "Lindsey", "Aga", "Chad", "Jenn", "Sarah"], lengthInMinutes: 1, color: Color("Web Dev"))
+            DailyScrum(title: "根据功能修改前端", attendees: ["Cathy", "Daisy", "Simon", "Jonathan"], lengthInMinutes: 120, color: Color("Design")),
+            DailyScrum(title: "改写后端逻辑、实现功能", attendees: ["Katie", "Gray", "Euna", "Luis", "Darla"], lengthInMinutes: 500, color: Color("App Dev")),
+            DailyScrum(title: "调试、打包成APP", attendees: ["Chella", "Chris", "Christina", "Eden", "Karla", "Lindsey", "Aga", "Chad", "Jenn", "Sarah"], lengthInMinutes: 60, color: Color("Web Dev"))
         ]
     }
 }
