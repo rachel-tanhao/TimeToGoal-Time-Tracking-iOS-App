@@ -10,10 +10,22 @@ struct MeetingView: View {
             RoundedRectangle(cornerRadius: 16.0)
                 .fill(Color(red: 255/255, green: 243/255, blue: 207/255))
 //                .fill(Color(red: 89/255, green: 180/255, blue: 195/255))
-            VStack(spacing: 20){
-                MeetingHeaderView(secondsElapsed: scrumTimer.secondsElapsed, secondsRemaining: scrumTimer.secondsRemaining, scrumColor: scrum.color)
-                MeetingTimerView(scrumColor: scrum.color, scrumTimer: scrumTimer)
+            
+            GeometryReader { geometry in
+                VStack {
+                    MeetingHeaderView(secondsElapsed: scrumTimer.secondsElapsed, secondsRemaining: scrumTimer.secondsRemaining, scrumColor: .orange)
+                        .frame(width: geometry.size.width, alignment: .top) // Aligns the header to the top
+                        .padding(.top) // Adds padding at the top inside the safe area
+                    
+                    Spacer() // This will push everything below it towards the bottom
+                    
+                    MeetingTimerView(scrumColor: .orange.opacity(0.5), scrumTimer: scrumTimer)
+                        .frame(width: geometry.size.width, height: geometry.size.height / 2, alignment: .center) // Centers the timer view
+                    
+                    Spacer() // This will push everything above it towards the top
+                }
             }
+
         }
         .padding()
         .foregroundColor(scrum.color.accessibleFontColor)

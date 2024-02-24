@@ -102,8 +102,8 @@ extension TaskList {
     static func withMockData() -> TaskList {
         let mockTaskList = TaskList()
         // Add a few mock tasks
-        mockTaskList.addTask(Task(name: "Work on SwiftUI", targetTime: 240, emoji: "📚"))
-        mockTaskList.addTask(Task(name: "Workout", targetTime: 60, emoji: "🏋️‍♂️"))
+        mockTaskList.addTask(Task(name: "Work on SwiftUI", accumTime: 60, targetTime: 240, emoji: "📚"))
+        mockTaskList.addTask(Task(name: "Workout", accumTime: 20, targetTime: 60,  emoji: "🏋️‍♂️"))
         return mockTaskList
     }
 }

@@ -30,7 +30,7 @@ struct TaskEditingView: View {
         NavigationView {
             Form {
                 TextField("Task Title", text: $taskName)
-                TextField("Target to invest __ mins", text: $taskHours)
+                TextField("Target to invest __ hours", text: $taskHours)
                     .keyboardType(.numberPad)
                 EmojiPickerView(selectedEmoji: $taskEmoji) // Use the emoji picker
             }
