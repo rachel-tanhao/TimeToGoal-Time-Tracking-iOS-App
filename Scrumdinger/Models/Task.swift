@@ -5,7 +5,6 @@
 //  Created by Yuanqi Wang on 2/24/24.
 //
 
-import Foundation
 
 class Record: Identifiable, Codable {
     var taskID: UUID
@@ -65,3 +64,4 @@ class Task: Identifiable, Codable {
         }
     }
 }
+
