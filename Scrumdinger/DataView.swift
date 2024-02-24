@@ -4,6 +4,7 @@ struct DataView: View {
     @EnvironmentObject var taskList: TaskList
     @State private var hasTask = true
     @State private var showingAddTaskView = false
+    @State private var selectedTaskForEditing: Task? = nil
     @Environment(\.presentationMode) var presentationMode
 
     let columns: [GridItem] = [
@@ -22,22 +23,27 @@ struct DataView: View {
                     if hasTask {
                         ForEach(taskList.getTaskList()) { task in
                             VStack(alignment: .leading) {
-                                Text(task.emoji) // Display the emoji next to the task name
-                                    .font(.title) // You can adjust the font size as needed
+                                Text(task.emoji)
+                                    .font(.title)
                                 Text(task.name)
                                     .font(.headline)
-                                Text("Invested: \(task.accumTime) mins") // Display the invested time
+                                Text("Invested: \(task.accumTime) mins")
                                     .font(.subheadline)
                             }
                             .padding()
                             .background(Color.secondary.opacity(0.1))
                             .cornerRadius(10)
+                            .onTapGesture {
+                                self.selectedTaskForEditing = task // Set the task to be edited
+                                self.showingAddTaskView = true // Trigger the sheet to show TaskEditingView
+                            }
                         }
                     } else {
                         Text("No Existing Tasks")
                     }
                 }
                 .padding()
+            
             }
             .navigationTitle("🎯 My Goals")
             .toolbar {
@@ -57,9 +63,16 @@ struct DataView: View {
                 }
             }
             .sheet(isPresented: $showingAddTaskView) {
-                TaskEditingView(isPresented: $showingAddTaskView)
-                    .environmentObject(taskList)
+                if let taskToEdit = selectedTaskForEditing {
+                    TaskEditingView(isPresented: $showingAddTaskView, taskToEdit: taskToEdit)
+                        // No need to pass taskList here; it's inherited from the environment
+                } else {
+                    TaskEditingView(isPresented: $showingAddTaskView)
+                        // No need to pass taskList here; it's inherited from the environment
+                }
             }
+
+
         }
     }
 }

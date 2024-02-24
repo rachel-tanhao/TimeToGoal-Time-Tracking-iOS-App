@@ -9,11 +9,18 @@ import SwiftUI
 
 struct TaskEditingView: View {
     @Binding var isPresented: Bool
-    @EnvironmentObject var taskList: TaskList
+    var taskToEdit: Task? // Optional task to edit
+    @EnvironmentObject var taskList: TaskList // Automatically injected
     @State private var taskName: String = ""
     @State private var taskHours: String = ""
     @State private var taskEmoji: String = "🎯" // Default emoji
-
+    
+    // Init for editing existing tasks
+    init(isPresented: Binding<Bool>, taskToEdit: Task? = nil) {
+        self._isPresented = isPresented
+        self.taskToEdit = taskToEdit
+        // Initialize other properties if needed
+    }
     var body: some View {
         NavigationView {
             Form {
@@ -33,11 +40,22 @@ struct TaskEditingView: View {
     }
     
     private func saveTask() {
-        guard !taskName.isEmpty, let accumTime = Int(taskHours) else { return }
-        let newTask = Task(id: UUID(), name: taskName, accumTime: accumTime, emoji: taskEmoji)
-        taskList.addTask(newTask)
+        // Update this function to handle both creating a new task and updating an existing task
+        if let task = taskToEdit {
+            // Update the existing task
+            task.name = taskName
+            task.accumTime = Int(taskHours) ?? 0
+            task.emoji = taskEmoji
+        } else {
+            // Create a new task
+            let newTask = Task(id: UUID(), name: taskName, accumTime: Int(taskHours) ?? 0, emoji: taskEmoji)
+            taskList.addTask(newTask)
+        }
+        isPresented = false
     }
 }
+
+
 
 
 struct EmojiPickerView: View {

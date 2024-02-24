@@ -76,11 +76,22 @@ class Task: Identifiable, Codable {
         return tasks
     }
     
+    
+    
     func save() {
         if let encoded = try? JSONEncoder().encode(tasks) {
             UserDefaults.standard.set(encoded, forKey: TasksSaveKey)
         }
     }
+    
+    
+    func updateTask(_ task: Task) {
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks[index] = task
+            save() // Assuming you have a method to persist changes
+        }
+    }
+
 }
 
 
