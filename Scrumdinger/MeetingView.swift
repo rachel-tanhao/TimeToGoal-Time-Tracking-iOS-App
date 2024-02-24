@@ -4,12 +4,12 @@ import AVFoundation
 struct MeetingView: View {
     @Binding var scrum: DailyScrum
     @StateObject var scrumTimer = ScrumTimer()
+    @EnvironmentObject var taskList: TaskList
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16.0)
                 .fill(Color(red: 255/255, green: 243/255, blue: 207/255))
-//                .fill(Color(red: 89/255, green: 180/255, blue: 195/255))
             
             GeometryReader { geometry in
                 VStack {
@@ -23,8 +23,23 @@ struct MeetingView: View {
                         .frame(width: geometry.size.width, height: geometry.size.height / 2, alignment: .center) // Centers the timer view
                     
                     Spacer() // This will push everything above it towards the top
+                    
+                    Button(action: {
+                        scrumTimer.stopScrum()
+                        let elapsedMinutes = scrumTimer.secondsElapsed
+                        taskList.accumulateTime(taskId: scrum.corrTaskId, duration: elapsedMinutes)
+                    }) {
+                        Text("Stop")
+                            .padding()
+                            .background(Color(red: 99/255, green: 122/255, blue: 159/255))
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                    .padding(.bottom, 80) // Adds padding at the bottom of the button
                 }
             }
+            
+            
 
         }
         .padding()
@@ -45,5 +60,6 @@ struct MeetingView: View {
 struct MeetingView_Previews: PreviewProvider {
     static var previews: some View {
         MeetingView(scrum: .constant(DailyScrum.data[0]))
+            .environmentObject(TaskList.shared)
     }
 }
