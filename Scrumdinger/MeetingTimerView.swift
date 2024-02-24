@@ -27,6 +27,7 @@ struct MeetingTimerView: View {
                 Text(timeRemainingFormatted)
                     .font(.system(size: 60))
                     .fontWeight(.black)
+                    .foregroundColor(.orange.opacity(0.9)) // Changes the text color to orange
             }
         }
     }

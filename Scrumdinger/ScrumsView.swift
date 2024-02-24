@@ -20,24 +20,23 @@ struct ScrumsView: View {
         List {
             ForEach(scrums) { scrum in
                 ZStack {
-                    NavigationLink(destination: DetailView(scrum: binding(for: scrum)), tag: scrum.id, selection: $selectedScrumID) {
-                        EmptyView()
-                    }
-                    .opacity(0)
-                    .buttonStyle(PlainButtonStyle())
-
+//                    NavigationLink(destination: DetailView(scrum: binding(for: scrum)), tag: scrum.id, selection: $selectedScrumID) {
+//                        EmptyView()
+//                    }
+//                    .opacity(0)
+//                    .buttonStyle(PlainButtonStyle())
                     CardView(scrum: scrum, navigateToMeeting: {
-                        // Trigger for MeetingView
                         activeMeetingScrumID = scrum.id
                     }, navigateToDetail: {
-                        // Trigger navigation to DetailView
                         selectedScrumID = scrum.id
+                        isPresented = true // Use the existing sheet presentation for EditView
                     })
                 }
-                .listRowBackground(scrum.color)
+                .listRowBackground(scrum.color) // should later change based on category
                 .onTapGesture {
-                    // This is to ensure the tap on the CardView (except the button) navigates to DetailView
+                    // This is to ensure the tap on the CardView (except the button) navigates to EditView
                     selectedScrumID = scrum.id
+                    isPresented = true
                 }
             }
         }
@@ -80,11 +79,11 @@ struct ScrumsView: View {
                         scrums.append(newScrum)
                         isPresented = false
                     })
+
             }
         }
         
 
-        
         .onChange(of: scenePhase) { phase in
             if phase == .inactive { saveAction() }
         }
@@ -92,7 +91,6 @@ struct ScrumsView: View {
             get: { self.activeMeetingScrumID != nil },
             set: { _ in self.activeMeetingScrumID = nil }
         )) {
-            // Assuming MeetingView requires a scrum to initialize
             if let activeMeetingScrumID = activeMeetingScrumID, let scrum = scrums.first(where: { $0.id == activeMeetingScrumID }) {
                 MeetingView(scrum: binding(for: scrum))
             } else {

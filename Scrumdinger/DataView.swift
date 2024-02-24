@@ -25,13 +25,21 @@ struct DataView: View {
                             VStack(alignment: .leading) {
                                 Text(task.emoji)
                                     .font(.title)
+                                
                                 Text(task.name)
                                     .font(.headline)
-                                Text("Invested: \(task.accumTime) mins")
+                                
+                                Text("Expected: \(Double(task.targetTime) / 60, specifier: "%.1f") hrs")
+                                    .font(.subheadline)
+                                
+                                Text("Invested: \(Double(task.accumTime) / 60, specifier: "%.1f") hrs")
+                                    .font(.subheadline)
+                                
+                                Text("Progress: \(Double(task.accumTime) / Double(task.targetTime) * 100, specifier: "%.0f")%")
                                     .font(.subheadline)
                             }
                             .padding()
-                            .background(Color.secondary.opacity(0.1))
+                            .background(Color.orange.opacity(0.2))
                             .cornerRadius(10)
                             .onTapGesture {
                                 self.selectedTaskForEditing = task // Set the task to be edited
@@ -72,8 +80,8 @@ struct DataView: View {
                 }
             }
 
-
         }
+        
     }
 }
 

@@ -2,9 +2,17 @@ import SwiftUI
 
 struct EditView: View {
     @Binding var scrumData: DailyScrum.Data
+
     @ObservedObject var taskList = TaskList.shared // Use your shared TaskList
     @Binding var corrTaskId: UUID? // Binding to the Scrum's corrTaskId
     @State private var showingTaskCreation = false // To show/hide task creation sheet
+
+
+    @State private var selectedType: String = "work" // Temporary state
+    let types = ["work", "health", "study", "custom"] // should come from backend
+    @State private var customType: String = "" // State for custom type input
+
+    
 
     var body: some View {
         List {
@@ -19,8 +27,17 @@ struct EditView: View {
                     Text("\(Int(scrumData.lengthInHours)) hours")
                         .accessibilityHidden(true)
                 }
-                ColorPicker("Color", selection: $scrumData.color)
-                    .accessibilityLabel(Text("Color picker"))
+                Picker("Type", selection: $selectedType) {
+                    ForEach(types, id: \.self) { type in
+                        Text(type.capitalized)
+                            .foregroundColor(colorForType(type: type)) // Set text color based on type
+                    }
+                }
+                // Add TextField for custom type input if "custom" is selected
+                if selectedType == "custom" {
+                    TextField("Custom Type", text: $customType)
+                        .foregroundColor(colorForType(type: "custom"))
+                }
             }
 
             Section(header: Text("Select Task")) {
@@ -45,6 +62,7 @@ struct EditView: View {
         .sheet(isPresented: $showingTaskCreation) {
             TaskCreationView(isPresented: $showingTaskCreation, selectedTaskId: $corrTaskId)
                 .environmentObject(taskList)
+
         }
         .listStyle(InsetGroupedListStyle())
     }
