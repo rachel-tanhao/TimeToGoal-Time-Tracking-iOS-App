@@ -26,6 +26,8 @@ struct TaskView: View {
                         VStack(alignment: .leading) {
                             Text(task.name)
                                 .font(.headline)
+                            Text("Accumulated time: " + String(task.accumTime))
+                                .font(.subheadline)
                         }
                     }
                 } else {
@@ -35,7 +37,7 @@ struct TaskView: View {
             .navigationTitle("Task List")
             .toolbar {
                 Button {
-                    let newTask = Task(id: UUID(), name: "test")
+                    let newTask = Task(id: UUID(), name: "test", accumTime: 20)
                     taskList.addTask(newTask)
                     checkEmpty()
                 } label: {
