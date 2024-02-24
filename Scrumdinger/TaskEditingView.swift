@@ -10,22 +10,27 @@ import SwiftUI
 struct TaskEditingView: View {
     @Binding var isPresented: Bool
     var taskToEdit: Task? // Optional task to edit
-    @EnvironmentObject var taskList: TaskList // Automatically injected
+    @EnvironmentObject var taskList: TaskList
     @State private var taskName: String = ""
     @State private var taskHours: String = ""
-    @State private var taskEmoji: String = "🎯" // Default emoji
+    @State private var taskEmoji: String = "🎯"
     
-    // Init for editing existing tasks
     init(isPresented: Binding<Bool>, taskToEdit: Task? = nil) {
         self._isPresented = isPresented
         self.taskToEdit = taskToEdit
-        // Initialize other properties if needed
+        // Check if there is a task to edit and initialize the state variables accordingly
+        if let task = taskToEdit {
+            _taskName = State(initialValue: task.name)
+            _taskHours = State(initialValue: String(task.targetTime))
+            _taskEmoji = State(initialValue: task.emoji)
+        }
     }
+    
     var body: some View {
         NavigationView {
             Form {
                 TextField("Task Title", text: $taskName)
-                TextField("Expected Working Hours", text: $taskHours)
+                TextField("Target to invest __ mins", text: $taskHours)
                     .keyboardType(.numberPad)
                 EmojiPickerView(selectedEmoji: $taskEmoji) // Use the emoji picker
             }
@@ -44,11 +49,11 @@ struct TaskEditingView: View {
         if let task = taskToEdit {
             // Update the existing task
             task.name = taskName
-            task.accumTime = Int(taskHours) ?? 0
+            task.targetTime = Int(taskHours) ?? 0
             task.emoji = taskEmoji
         } else {
             // Create a new task
-            let newTask = Task(id: UUID(), name: taskName, accumTime: Int(taskHours) ?? 0, emoji: taskEmoji)
+            let newTask = Task(id: UUID(), name: taskName, targetTime: Int(taskHours) ?? 0, emoji: taskEmoji)
             taskList.addTask(newTask)
         }
         isPresented = false
