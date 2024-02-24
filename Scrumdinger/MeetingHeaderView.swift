@@ -10,13 +10,16 @@ struct MeetingHeaderView: View {
     private var minutesRemaining: Int {
         secondsRemaining / 60
     }
+    private var minutesElapsed: Int{
+        secondsElapsed / 60
+    }
     private var minutesRemainingMetric: String {
         minutesRemaining == 1 ? "minute" : "minutes"
     }
     private var progress: Double {
         guard secondsRemaining > 0 else { return 1 }
-        let totalSeconds = Double(secondsElapsed + secondsRemaining)
-        return Double(secondsElapsed) / totalSeconds
+        let totalMinutes = Double(minutesElapsed + minutesRemaining)
+        return Double(minutesElapsed) / totalMinutes
     }
     let scrumColor: Color
 
@@ -26,16 +29,16 @@ struct MeetingHeaderView: View {
                 .progressViewStyle(ScrumProgressViewStyle(scrumColor: scrumColor))
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Seconds Elapsed")
+                    Text("Minutes Elapsed")
                         .font(.caption)
-                    Label("\(secondsElapsed)", systemImage: "hourglass.bottomhalf.fill")
+                    Label("\(minutesElapsed)", systemImage: "hourglass.bottomhalf.fill")
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text("Seconds Remaining")
+                    Text("Minutes Remaining")
                         .font(.caption)
                     HStack {
-                        Text("\(secondsRemaining)")
+                        Text("\(minutesRemaining)")
                         Image(systemName: "hourglass.tophalf.fill")
                     }
                 }

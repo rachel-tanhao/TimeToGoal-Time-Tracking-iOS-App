@@ -36,7 +36,10 @@ struct ScrumsView: View {
                         isPresented = false
                     }, trailing: Button("Add") {
                         let newScrum = DailyScrum(title: newScrumData.title, attendees: newScrumData.attendees,
-                                                  lengthInMinutes: Int(newScrumData.lengthInMinutes), color: newScrumData.color)
+                                                  lengthInMinutes: Int(newScrumData.lengthInMinutes), color: newScrumData.color,
+                                                  lengthInHours: Int(newScrumData.lengthInHours),
+                                                  progressHours: Int(newScrumData.progressHours),
+                                                  category: newScrumData.category)
                         scrums.append(newScrum)
                         isPresented = false
                     })
