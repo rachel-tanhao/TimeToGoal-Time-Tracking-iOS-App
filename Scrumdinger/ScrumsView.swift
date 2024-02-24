@@ -7,6 +7,7 @@ import SwiftUI
 struct ScrumsView: View {
     @Binding var scrums: [DailyScrum]
     @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject var taskList: TaskList
     @State private var isPresented = false
     @State private var newScrumData = DailyScrum.Data()
     @State private var activeMeetingScrumID: DailyScrum.ID? = nil
@@ -65,7 +66,7 @@ struct ScrumsView: View {
         // For Toolbar right item: add a new timer
         .sheet(isPresented: $isPresented) {
             NavigationView {
-                EditView(scrumData: $newScrumData)
+                EditView(scrumData: $newScrumData, corrTaskId: $newScrumData.corrTaskId)
                     .navigationBarItems(leading: Button("Dismiss") {
                         isPresented = false
                     }, trailing: Button("Add") {
@@ -73,7 +74,9 @@ struct ScrumsView: View {
                                                   lengthInMinutes: Int(newScrumData.lengthInMinutes), color: newScrumData.color,
                                                   lengthInHours: Int(newScrumData.lengthInHours),
                                                   progressHours: Int(newScrumData.progressHours),
-                                                  category: newScrumData.category)
+                                                  category: newScrumData.category,
+                                                  corrTaskId: newScrumData.corrTaskId
+                        )
                         scrums.append(newScrum)
                         isPresented = false
                     })
@@ -109,7 +112,7 @@ struct ScrumsView: View {
 struct ScrumsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ScrumsView(scrums: .constant(DailyScrum.data), saveAction: {})
+            ScrumsView(scrums: .constant(DailyScrum.data), saveAction: {}).environmentObject(TaskList.shared)
         }
     }
 }
