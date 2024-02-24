@@ -33,6 +33,7 @@
 		B8050BFF2B8A6E52005B4543 /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8050BFE2B8A6E52005B4543 /* DataView.swift */; };
 		B8050C012B8A6EA1005B4543 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8050C002B8A6EA1005B4543 /* Task.swift */; };
 		B8050C072B8A8935005B4543 /* TaskEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8050C062B8A8935005B4543 /* TaskEditingView.swift */; };
+		E62B11132B8A9ADB00834E58 /* TaskCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62B11122B8A9ADB00834E58 /* TaskCreationView.swift */; };
 		ED1BC68F2B8A4AB00084D153 /* StatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1BC68E2B8A4AB00084D153 /* StatView.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		B8050BFE2B8A6E52005B4543 /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
 		B8050C002B8A6EA1005B4543 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		B8050C062B8A8935005B4543 /* TaskEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditingView.swift; sourceTree = "<group>"; };
+		E62B11122B8A9ADB00834E58 /* TaskCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCreationView.swift; sourceTree = "<group>"; };
 		ED1BC68E2B8A4AB00084D153 /* StatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +131,7 @@
 				AA65BF4C24F46C27007E4A1B /* DetailView.swift */,
 				B8050BFE2B8A6E52005B4543 /* DataView.swift */,
 				B8050C062B8A8935005B4543 /* TaskEditingView.swift */,
+				E62B11122B8A9ADB00834E58 /* TaskCreationView.swift */,
 				AA13BBBE24F567AA005EB048 /* EditView.swift */,
 				AA8ACE8524F44E01007DA4D8 /* MeetingView.swift */,
 				AA5719D724F57D59002316EB /* MeetingHeaderView.swift */,
@@ -244,6 +247,7 @@
 				AA5719D824F57D59002316EB /* MeetingHeaderView.swift in Sources */,
 				AAD1604124F59EC40014DFC3 /* ScrumData.swift in Sources */,
 				AAD1604924F5BB640014DFC3 /* HistoryView.swift in Sources */,
+				E62B11132B8A9ADB00834E58 /* TaskCreationView.swift in Sources */,
 				AAD1604324F5A08F0014DFC3 /* MeetingTimerView.swift in Sources */,
 				ED1BC68F2B8A4AB00084D153 /* StatView.swift in Sources */,
 				AA13BBC824F56FC6005EB048 /* AVPlayer+Ding.swift in Sources */,
