@@ -5,57 +5,48 @@
 import SwiftUI
 
 struct DataView: View {
-    @ObservedObject var taskList: TaskList
-
+    @EnvironmentObject var taskList: TaskList
+    @State var hasTask = true
+    @State private var addTaskPresent = false
+    
+    func checkEmpty() {
+        if taskList.tasks.isEmpty {
+            hasTask = false
+        }
+    }
+    
     var body: some View {
         NavigationView {
             List {
-                ForEach(taskList.getTaskList()) { task in
-                    NavigationLink(destination: TaskDetailView(task: task)) {
-                        HStack {
+                if hasTask {
+                    ForEach(taskList.getTaskList()) { task in
+                        VStack(alignment: .leading) {
                             Text(task.name)
-                            Spacer()
-                            Text("\(task.accumTime) mins")
-                                .foregroundColor(.gray)
+                                .font(.headline)
+                            Text("Accumulated time: " + String(task.accumTime))
+                                .font(.subheadline)
                         }
                     }
+                } else {
+                    Text("No Existing Tasks")
                 }
             }
-            .navigationTitle("Tasks")
+            .navigationTitle("Task List")
+            .toolbar {
+                Button {
+                    let newTask = Task(id: UUID(), name: "test", accumTime: 20)
+                    taskList.addTask(newTask)
+                    checkEmpty()
+                } label: {
+                    Label("Add", systemImage: "plus")
+                }
+            }
         }
     }
 }
 
-
-struct TaskDetailView: View {
-    var task: Task
-
-    var body: some View {
-        List {
-            Section(header: Text("Details")) {
-                Text("Name: \(task.name)")
-                Text("Accumulated Time: \(task.accumTime) mins")
-            }
-            Section(header: Text("Records")) {
-                ForEach(task.records) { record in
-                    VStack(alignment: .leading) {
-                        Text("Start: \(record.startTime, formatter: itemFormatter)")
-                        Text("End: \(record.endTime, formatter: itemFormatter)")
-                        Text("Duration: \(record.duration) mins")
-                    }
-                }
-            }
-        }
-        .navigationTitle(task.name)
-        .navigationBarTitleDisplayMode(.inline)
+struct DataView_Previews: PreviewProvider {
+    static var previews: some View {
+        DataView().environmentObject(TaskList.shared)
     }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .short
-    return formatter
-}()
-
-

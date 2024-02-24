@@ -59,7 +59,7 @@ struct ScrumsView: View {
         
         // For Toolbar left item: show DataView
         .sheet(isPresented: $isDataViewPresented) {
-            // DataView() // Pass any required parameters or bindings
+            DataView().environmentObject(TaskList.shared)
         }
         
         // For Toolbar right item: add a new timer

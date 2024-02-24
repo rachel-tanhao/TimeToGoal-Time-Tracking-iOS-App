@@ -27,7 +27,7 @@ class Task: Identifiable, Codable {
     var accumTime: Int
     fileprivate(set) var records: [Record]
     
-    init(id: UUID = UUID(), name: String, accumTime: Int = 0, records: [Record]) {
+    init(id: UUID = UUID(), name: String, accumTime: Int = 0) {
         self.id = id
         self.name = name
         self.accumTime = accumTime
@@ -40,9 +40,11 @@ class Task: Identifiable, Codable {
 }
 
 @MainActor class TaskList: ObservableObject {
-    @Published private(set) var tasks: [Task]
-    let TasksSaveKey = "taskList"
+    // below two lines are for access tasklist in ScrumsView
+    static let shared = TaskList()
+    @Published var tasks: [Task] = []
     
+    let TasksSaveKey = "taskList"
     init() {
         if let data = UserDefaults.standard.data(forKey: TasksSaveKey) {
             if let decoded = try? JSONDecoder().decode([Task].self, from: data) {
