@@ -5,7 +5,7 @@
 //  Created by Yuanqi Wang on 2/24/24.
 //
 
-import Foundation
+import SwiftUI
 
 class Record: Identifiable, Codable {
     var taskID: UUID
@@ -27,7 +27,6 @@ class Task: Identifiable, Codable {
     var accumTime: Int
     fileprivate(set) var records: [Record]
     
-    init(id: UUID = UUID(), name: String, accumTime: Int = 0) {
     init(id: UUID = UUID(), name: String, accumTime: Int = 0, records: [Record]) {
         self.id = id
         self.name = name
@@ -37,7 +36,6 @@ class Task: Identifiable, Codable {
     
     func addRecord(_ rec: Record) {
         records.append(rec)
-        self.records = records
     }
 }
 
