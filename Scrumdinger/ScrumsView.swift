@@ -41,7 +41,13 @@ struct ScrumsView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     isDataViewPresented = true
-                }) {Text("🎯 My goals")}
+                }) {
+                    HStack {
+                        Text("🎯")
+                            .padding(.bottom, 3)
+                        Text("My goals")
+                    }
+                }
             }
             // Toolbar right item
             ToolbarItem(placement: .navigationBarTrailing) {

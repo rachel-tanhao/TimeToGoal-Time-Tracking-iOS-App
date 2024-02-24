@@ -72,6 +72,21 @@ struct TaskEditingView: View {
     }
 }
 
+struct EmojiButton: View {
+    let emoji: String
+    @Binding var selectedEmoji: String
+    
+    var body: some View {
+        Text(emoji)
+            .font(.largeTitle)
+            .background(self.selectedEmoji == emoji ? Color.gray : Color.clear)
+            .cornerRadius(10)
+            .onTapGesture {
+                self.selectedEmoji = emoji
+            }
+    }
+}
+
 struct EmojiPickerView: View {
     @Binding var selectedEmoji: String
     let emojis = ["🎯", "🏀", "📚", "🧗‍♀️", "🔥", "🎉", "👩‍💻", "💼", "💐", "🍵", "🍕", "🏃‍♀️"]
@@ -79,12 +94,7 @@ struct EmojiPickerView: View {
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: 10) {
             ForEach(emojis, id: \.self) { emoji in
-                Button(action: {
-                    self.selectedEmoji = emoji
-                }) {
-                    Text(emoji)
-                        .font(.largeTitle)
-                }
+                EmojiButton(emoji: emoji, selectedEmoji: $selectedEmoji)
             }
         }
         .padding()
