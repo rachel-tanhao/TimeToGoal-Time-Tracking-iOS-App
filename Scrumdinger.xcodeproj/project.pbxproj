@@ -129,6 +129,7 @@
 				ED1BC68E2B8A4AB00084D153 /* StatView.swift */,
 				AA65BF4824F4636E007E4A1B /* CardView.swift */,
 				AA65BF4C24F46C27007E4A1B /* DetailView.swift */,
+				AA13BBBE24F567AA005EB048 /* EditView.swift */,
 				B8050BFE2B8A6E52005B4543 /* DataView.swift */,
 				B8050C062B8A8935005B4543 /* TaskEditingView.swift */,
 				E62B11122B8A9ADB00834E58 /* TaskCreationView.swift */,

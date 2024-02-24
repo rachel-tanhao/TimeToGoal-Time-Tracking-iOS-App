@@ -1,10 +1,3 @@
-//
-//  TaskEditingView.swift
-//  Scrumdinger
-//
-//  Created by Hao Tan on 2/24/24.
-//
-
 import SwiftUI
 
 struct TaskEditingView: View {
@@ -30,11 +23,23 @@ struct TaskEditingView: View {
         NavigationView {
             Form {
                 TextField("Task Title", text: $taskName)
-                TextField("Target to invest __ hours", text: $taskHours)
+                TextField("Target to put in how many hours", text: $taskHours)
                     .keyboardType(.numberPad)
                 EmojiPickerView(selectedEmoji: $taskEmoji) // Use the emoji picker
+                
+                // Delete Task button only appears when editing an existing task
+                if taskToEdit != nil {
+                    Button(action: deleteTask) {
+                        HStack {
+                            Spacer()
+                            Text("Delete Task")
+                                .foregroundColor(.red)
+                            Spacer()
+                        }
+                    }
+                }
             }
-            .navigationBarTitle("Add New Task", displayMode: .inline)
+            .navigationBarTitle(taskToEdit != nil ? "Edit Task" : "Add Task", displayMode: .inline)
             .navigationBarItems(leading: Button("Cancel") {
                 isPresented = false
             }, trailing: Button("Save") {
@@ -45,12 +50,13 @@ struct TaskEditingView: View {
     }
     
     private func saveTask() {
-        // Update this function to handle both creating a new task and updating an existing task
         if let task = taskToEdit {
             // Update the existing task
             task.name = taskName
             task.targetTime = Int(taskHours) ?? 0
             task.emoji = taskEmoji
+            // Trigger an update in the task list
+            taskList.updateTask(task)
         } else {
             // Create a new task
             let newTask = Task(id: UUID(), name: taskName, targetTime: Int(taskHours) ?? 0, emoji: taskEmoji)
@@ -58,10 +64,28 @@ struct TaskEditingView: View {
         }
         isPresented = false
     }
+    
+    private func deleteTask() {
+        guard let task = taskToEdit else { return }
+        taskList.deleteTask(task)
+        isPresented = false
+    }
 }
 
-
-
+struct EmojiButton: View {
+    let emoji: String
+    @Binding var selectedEmoji: String
+    
+    var body: some View {
+        Text(emoji)
+            .font(.largeTitle)
+            .background(self.selectedEmoji == emoji ? Color.gray : Color.clear)
+            .cornerRadius(10)
+            .onTapGesture {
+                self.selectedEmoji = emoji
+            }
+    }
+}
 
 struct EmojiPickerView: View {
     @Binding var selectedEmoji: String
@@ -70,22 +94,18 @@ struct EmojiPickerView: View {
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: 10) {
             ForEach(emojis, id: \.self) { emoji in
-                Button(action: {
-                    self.selectedEmoji = emoji
-                }) {
-                    Text(emoji)
-                        .font(.largeTitle)
-                }
+                EmojiButton(emoji: emoji, selectedEmoji: $selectedEmoji)
             }
         }
         .padding()
     }
 }
 
+
 struct TaskEditingView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskEditingView(isPresented: .constant(true))
+        // Provide a mock task for editing to the TaskEditingView
+        TaskEditingView(isPresented: .constant(true), taskToEdit: Task(name: "Sample Task", targetTime: 60, emoji: "📚"))
             .environmentObject(TaskList())
     }
 }
-

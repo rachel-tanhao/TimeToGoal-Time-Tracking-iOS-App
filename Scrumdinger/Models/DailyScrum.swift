@@ -72,16 +72,16 @@ extension DailyScrum {
     struct Data {
         var title: String = ""
         var attendees: [String] = []
-        var lengthInMinutes: Double = 5.0
+        var lengthInMinutes: Int = 120
         var color: Color = .random
-        var lengthInHours: Double = 5.0
-        var progressHours: Double = 3.0
+        var lengthInHours: Int = 2
+        var progressHours: Int = 0
         var category: String = ""
         var corrTaskId: UUID?
     }
 
     var data: Data {
-        return Data(title: title, attendees: attendees, lengthInMinutes: Double(lengthInMinutes), color: color, lengthInHours: Double(lengthInHours), progressHours: Double(progressHours), category: category, corrTaskId: corrTaskId)
+        return Data(title: title, attendees: attendees, lengthInMinutes: Int(lengthInMinutes), color: color, lengthInHours: Int(lengthInHours), progressHours: Int(progressHours), category: category, corrTaskId: corrTaskId)
     }
 
     mutating func update(from data: Data) {
