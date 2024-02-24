@@ -22,7 +22,7 @@ struct DetailView: View {
                     Label("Target Hours", systemImage: "clock")
                         .accessibilityLabel(Text("Meeting length"))
                     Spacer()
-                    Text("\(scrum.lengthInMinutes) minutes")
+                    Text("\(scrum.lengthInHours) hours")
                 }
                 HStack {
                     Label("Color", systemImage: "paintpalette")

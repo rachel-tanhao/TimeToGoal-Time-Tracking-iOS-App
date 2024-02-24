@@ -16,10 +16,9 @@ struct MeetingView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 16.0)
                 .fill(scrum.color)
-            VStack {
+            VStack(spacing: 20){
                 MeetingHeaderView(secondsElapsed: scrumTimer.secondsElapsed, secondsRemaining: scrumTimer.secondsRemaining, scrumColor: scrum.color)
-                MeetingTimerView(speakers: scrumTimer.speakers, isRecording: isRecording, scrumColor: scrum.color)
-                MeetingFooterView(speakers: scrumTimer.speakers, skipAction: scrumTimer.skipSpeaker)
+                MeetingTimerView(scrumColor: scrum.color, countTo: scrumTimer.secondsRemaining) // placeholder
             }
         }
         .padding()
@@ -38,7 +37,7 @@ struct MeetingView: View {
             scrumTimer.stopScrum()
             speechRecognizer.stopRecording()
             isRecording = false
-            let newHistory = History(attendees: scrum.attendees, lengthInMinutes: scrumTimer.secondsElapsed / 60, transcript: transcript)
+            let newHistory = History(attendees: scrum.attendees, lengthInMinutes: scrumTimer.secondsElapsed / 60, transcript: transcript, lengthInHours: scrumTimer.secondsElapsed / 3600)
             scrum.history.insert(newHistory, at: 0)
         }
     }
