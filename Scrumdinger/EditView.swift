@@ -2,32 +2,32 @@ import SwiftUI
 
 struct EditView: View {
     @Binding var scrumData: DailyScrum.Data
-    @State private var selectedType: String = "work" // Temporary state
-    let types = ["work", "health", "study", "custom"] // should come from backend
-    @State private var customType: String = "" // State for custom type input
+    @State private var selectedCategory: String = "work" // Temporary state, changed from selectedType
+    let categories = ["work", "health", "study", "custom"] // should come from backend, changed from types
+    @State private var customCategory: String = "" // State for custom category input, changed from customType
     
-    // Define a method to get color based on type
-    private func colorForType(type: String) -> Color {
-        switch type {
+    // Define a method to get color based on category
+    private func colorForCategory(category: String) -> Color {
+        switch category {
         case "work":
-            return Color.blue // Assuming blue is the color for work
+            return Color.blue
         case "health":
-            return Color.green // Assuming green is the color for health
+            return Color.green
         case "study":
-            return Color.yellow // Assuming yellow is the color for study
+            return Color.yellow
         case "custom":
-            return Color.purple // Assuming purple is the color for custom
+            return Color.purple
         default:
-            return Color.gray // Default color
+            return Color.gray
         }
     }
     
     var body: some View {
         List {
-            Section(header: Text("Meeting Info")) {
+            Section(header: Text("Time To Goal")) {
                 TextField("Title", text: $scrumData.title)
                 HStack {
-                    Slider(value: $scrumData.lengthInHours, in: 1...30, step: 1.0) {
+                    Slider(value: $scrumData.lengthInHours, in: 1...8, step: 1.0) {
                         Text("Length")
                     }
                     .accessibilityValue(Text("\(Int(scrumData.lengthInHours)) hours"))
@@ -35,16 +35,16 @@ struct EditView: View {
                     Text("\(Int(scrumData.lengthInHours)) hours")
                         .accessibilityHidden(true)
                 }
-                Picker("Type", selection: $selectedType) {
-                    ForEach(types, id: \.self) { type in
-                        Text(type.capitalized)
-                            .foregroundColor(colorForType(type: type)) // Set text color based on type
+                Picker("Category", selection: $selectedCategory) { // Changed from "Type" to "Category"
+                    ForEach(categories, id: \.self) { category in
+                        Text(category.capitalized)
+                            .foregroundColor(colorForCategory(category: category))
                     }
                 }
-                // Add TextField for custom type input if "custom" is selected
-                if selectedType == "custom" {
-                    TextField("Custom Type", text: $customType)
-                        .foregroundColor(colorForType(type: "custom"))
+
+                if selectedCategory == "custom" {
+                    TextField("Custom Category", text: $customCategory)
+                        .foregroundColor(colorForCategory(category: "custom"))
                 }
             }
         }

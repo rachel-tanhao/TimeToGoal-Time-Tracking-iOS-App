@@ -19,21 +19,15 @@ struct ScrumsView: View {
         List {
             ForEach(scrums) { scrum in
                 ZStack {
-//                    NavigationLink(destination: DetailView(scrum: binding(for: scrum)), tag: scrum.id, selection: $selectedScrumID) {
-//                        EmptyView()
-//                    }
-//                    .opacity(0)
-//                    .buttonStyle(PlainButtonStyle())
                     CardView(scrum: scrum, navigateToMeeting: {
                         activeMeetingScrumID = scrum.id
                     }, navigateToDetail: {
                         selectedScrumID = scrum.id
-                        isPresented = true // Use the existing sheet presentation for EditView
+                        isPresented = true
                     })
                 }
                 .listRowBackground(scrum.color) // should later change based on category
                 .onTapGesture {
-                    // This is to ensure the tap on the CardView (except the button) navigates to EditView
                     selectedScrumID = scrum.id
                     isPresented = true
                 }
@@ -45,13 +39,13 @@ struct ScrumsView: View {
             // Toolbar left item
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    isDataViewPresented = true // This should trigger DataView presentation
+                    isDataViewPresented = true
                 }) {Text("🎯 My goals")}
             }
             // Toolbar right item
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    isPresented = true // This triggers the EditView presentation
+                    isPresented = true
                 }) {Image(systemName: "plus")}
             }
         }
@@ -61,18 +55,24 @@ struct ScrumsView: View {
             DataView().environmentObject(TaskList.shared)
         }
         
+//        EditView(scrumData: .constant(DailyScrum.data[0].data))
+
         // For Toolbar right item: add a new timer
         .sheet(isPresented: $isPresented) {
             // Check if we have a selectedScrumID and fetch the corresponding DailyScrum
-            if var selectedScrumID = selectedScrumID, let scrumIndex = scrums.firstIndex(where: { $0.id == selectedScrumID }) {
+            if let selectedScrumID = selectedScrumID, let scrumIndex = scrums.firstIndex(where: { $0.id == selectedScrumID }) {
+                let selectedScrum = scrums[scrumIndex]
+
+                
                 NavigationView {
                     EditView(scrumData: $newScrumData)
                         .navigationBarItems(leading: Button("Dismiss") {
                             isPresented = false
 
                         }, trailing: Button("Save") {
+                            scrums[scrumIndex].update(from: newScrumData) // Update the scrum with new data
                             isPresented = false
-
+                            saveAction() // Call save action
                         })
                 }
             } else {
