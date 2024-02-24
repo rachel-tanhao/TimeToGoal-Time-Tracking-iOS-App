@@ -11,9 +11,15 @@ struct EditView: View {
             Section(header: Text("Time To Goal")) {
                 TextField("Title", text: $scrumData.title)
                 HStack {
-                    Slider(value: $scrumData.lengthInHours, in: 1...8, step: 1.0) {
-                        Text("Length")
-                    }
+                    Slider(value: Binding(
+                        get: { Double (scrumData.lengthInHours) },
+                        set: { newValue in
+                            scrumData.lengthInHours = Int (newValue)
+                            scrumData.lengthInMinutes = scrumData.lengthInHours * 60
+                        }),
+                        in: 1...8, step: 1.0) {
+                            Text("Length")
+                        }
                     .accessibilityValue(Text("\(Int(scrumData.lengthInHours)) hours"))
                     Spacer()
                     Text("\(Int(scrumData.lengthInHours)) hours")
