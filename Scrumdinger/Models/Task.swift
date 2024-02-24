@@ -5,6 +5,7 @@
 //  Created by Yuanqi Wang on 2/24/24.
 //
 
+import Foundation
 
 class Record: Identifiable, Codable {
     var taskID: UUID
@@ -26,10 +27,16 @@ class Task: Identifiable, Codable {
     var accumTime: Int
     fileprivate(set) var records: [Record]
     
+    init(id: UUID = UUID(), name: String, accumTime: Int = 0) {
     init(id: UUID = UUID(), name: String, accumTime: Int = 0, records: [Record]) {
         self.id = id
         self.name = name
         self.accumTime = accumTime
+        self.records = []
+    }
+    
+    func addRecord(_ rec: Record) {
+        records.append(rec)
         self.records = records
     }
 }
@@ -52,6 +59,10 @@ class Task: Identifiable, Codable {
     func addTask(_ task: Task){
         tasks.append(task)
         save()
+    }
+    
+    func addRecordToTask(taskId: UUID, record: Record) {
+        
     }
     
     func getTaskList() -> [Task] {
