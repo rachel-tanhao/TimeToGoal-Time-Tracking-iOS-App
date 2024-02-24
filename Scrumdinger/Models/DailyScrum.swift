@@ -18,7 +18,7 @@ struct DailyScrum: Identifiable, Codable {
 
     // CodingKeys enum to match the JSON keys
     enum CodingKeys: String, CodingKey {
-        case id, title, attendees, lengthInMinutes, color, history, lengthInHours,progressHours, category
+        case id, title, attendees, lengthInMinutes, color, history, lengthInHours,progressHours, category, corrTaskId
     }
     
     init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = [], lengthInHours: Int, progressHours: Int, category:String, corrTaskId: UUID? = nil) {
@@ -50,6 +50,8 @@ struct DailyScrum: Identifiable, Codable {
             lengthInHours = try container.decodeIfPresent(Int.self, forKey: .lengthInHours) ?? lengthInMinutes / 60
             progressHours = try container.decodeIfPresent(Int.self, forKey: .progressHours) ?? 0
             category = try container.decode(String.self, forKey: .category)
+            corrTaskId = try container.decodeIfPresent(UUID.self, forKey: .corrTaskId)
+
         }
 }
 
