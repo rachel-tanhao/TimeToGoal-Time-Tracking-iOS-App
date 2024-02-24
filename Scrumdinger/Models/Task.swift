@@ -50,7 +50,6 @@ class Task: Identifiable, Codable {
                 return
             }
         }
-        
         tasks = []
     }
     
@@ -60,8 +59,13 @@ class Task: Identifiable, Codable {
     }
     
     func addRecordToTask(taskId: UUID, record: Record) {
-        
+        if let index = tasks.firstIndex(where: { $0.id == taskId }) {
+            tasks[index].addRecord(record)
+            tasks[index].accumTime += record.duration
+            save()
+        }
     }
+
     
     func getTaskList() -> [Task] {
         return tasks

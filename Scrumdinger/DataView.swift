@@ -8,51 +8,54 @@ struct DataView: View {
     @ObservedObject var taskList: TaskList
 
     var body: some View {
-        
         NavigationView {
             List {
-                ForEach(taskList.tasks) { task in
+                ForEach(taskList.getTaskList()) { task in
                     NavigationLink(destination: TaskDetailView(task: task)) {
                         HStack {
                             Text(task.name)
                             Spacer()
-                            Text("\(task.accumTime) min")
+                            Text("\(task.accumTime) mins")
+                                .foregroundColor(.gray)
                         }
                     }
                 }
-                .onDelete(perform: deleteTasks)
             }
             .navigationTitle("Tasks")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        // Action for adding a new task
-                    }) {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
         }
     }
-    
-    func deleteTasks(at offsets: IndexSet) {
-        // taskList.tasks.remove(atOffsets: offsets)
-        // taskList.save()
-    }
 }
+
 
 struct TaskDetailView: View {
     var task: Task
 
     var body: some View {
-        List(task.records) { record in
-            VStack(alignment: .leading) {
-                Text("Start: \(record.startTime)")
-                Text("End: \(record.endTime)")
-                Text("Duration: \(record.duration) min")
+        List {
+            Section(header: Text("Details")) {
+                Text("Name: \(task.name)")
+                Text("Accumulated Time: \(task.accumTime) mins")
+            }
+            Section(header: Text("Records")) {
+                ForEach(task.records) { record in
+                    VStack(alignment: .leading) {
+                        Text("Start: \(record.startTime, formatter: itemFormatter)")
+                        Text("End: \(record.endTime, formatter: itemFormatter)")
+                        Text("Duration: \(record.duration) mins")
+                    }
+                }
             }
         }
         .navigationTitle(task.name)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+private let itemFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .short
+    formatter.timeStyle = .short
+    return formatter
+}()
+
 

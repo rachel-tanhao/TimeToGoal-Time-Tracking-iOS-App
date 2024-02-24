@@ -39,9 +39,10 @@ struct CardView: View {
             }
             .buttonStyle(PlainButtonStyle())
         }
+        .padding(10)
         .foregroundColor(scrum.color.accessibleFontColor)
         .background(scrum.color)
-        .padding(10)
+
     }
 }
 
