@@ -3,10 +3,9 @@ import SwiftUI
 struct DataView: View {
     @EnvironmentObject var taskList: TaskList
     @State private var hasTask = true
-    @State private var addTaskPresent = false
+    @State private var showingAddTaskView = false
     @Environment(\.presentationMode) var presentationMode
 
-    // Define columns for your grid
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
@@ -23,13 +22,15 @@ struct DataView: View {
                     if hasTask {
                         ForEach(taskList.getTaskList()) { task in
                             VStack(alignment: .leading) {
+                                Text(task.emoji) // Display the emoji next to the task name
+                                    .font(.title) // You can adjust the font size as needed
                                 Text(task.name)
                                     .font(.headline)
-                                Text("Invested: \(task.accumTime) mins")
+                                Text("Invested: \(task.accumTime) mins") // Display the invested time
                                     .font(.subheadline)
                             }
                             .padding()
-                            .background(Color.secondary.opacity(0.1)) // Adjusted for compatibility
+                            .background(Color.secondary.opacity(0.1))
                             .cornerRadius(10)
                         }
                     } else {
@@ -38,13 +39,11 @@ struct DataView: View {
                 }
                 .padding()
             }
-            .navigationTitle("My Goals")
+            .navigationTitle("🎯 My Goals")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        let newTask = Task(id: UUID(), name: "New Task", accumTime: 20)
-                        taskList.addTask(newTask)
-                        checkEmpty()
+                        showingAddTaskView = true
                     }) {
                         Label("Add", systemImage: "plus")
                     }
@@ -57,12 +56,17 @@ struct DataView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showingAddTaskView) {
+                TaskEditingView(isPresented: $showingAddTaskView)
+                    .environmentObject(taskList)
+            }
         }
     }
 }
 
 struct DataView_Previews: PreviewProvider {
     static var previews: some View {
-        DataView().environmentObject(TaskList.shared)
+        DataView()
+            .environmentObject(TaskList.withMockData()) // Assuming you have implemented the withMockData() method
     }
 }

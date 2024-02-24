@@ -25,12 +25,14 @@ class Task: Identifiable, Codable {
     var id: UUID
     var name: String
     var accumTime: Int
+    var emoji: String
     fileprivate(set) var records: [Record]
     
-    init(id: UUID = UUID(), name: String, accumTime: Int = 0) {
+    init(id: UUID = UUID(), name: String, accumTime: Int = 0, emoji: String = "🎯") {
         self.id = id
         self.name = name
         self.accumTime = accumTime
+        self.emoji = emoji
         self.records = []
     }
     
@@ -81,3 +83,14 @@ class Task: Identifiable, Codable {
     }
 }
 
+
+// mock data
+extension TaskList {
+    static func withMockData() -> TaskList {
+        let mockTaskList = TaskList()
+        // Add a few mock tasks
+        mockTaskList.addTask(Task(name: "Work on SwiftUI", accumTime: 120, emoji: "📚"))
+        mockTaskList.addTask(Task(name: "Workout", accumTime: 60, emoji: "🏋️‍♂️"))
+        return mockTaskList
+    }
+}
