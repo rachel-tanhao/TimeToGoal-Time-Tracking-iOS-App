@@ -1,9 +1,5 @@
 /*
- 目标追踪主页面板:
-    展示目标名称，所设定的需要时间。
-    不需要attendees功能，可以考虑换成进度条展示。
-    需要在每张卡片上添加一个“开始”按钮，跳转到计时器页面。
-    右上角“添加”功能的跳转面板需要编辑。
+ 目标追踪主页面板
  */
 
 import SwiftUI
@@ -13,14 +9,34 @@ struct ScrumsView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var isPresented = false
     @State private var newScrumData = DailyScrum.Data()
+    @State private var activeMeetingScrumID: DailyScrum.ID? = nil
+    @State private var selectedScrumID: DailyScrum.ID? = nil // For DetailView navigation
+
     let saveAction: () -> Void
+    
     var body: some View {
         List {
             ForEach(scrums) { scrum in
-                NavigationLink(destination: DetailView(scrum: binding(for: scrum))) {
-                    CardView(scrum: scrum)
+                ZStack {
+                    NavigationLink(destination: DetailView(scrum: binding(for: scrum)), tag: scrum.id, selection: $selectedScrumID) {
+                        EmptyView()
+                    }
+                    .opacity(0)
+                    .buttonStyle(PlainButtonStyle())
+
+                    CardView(scrum: scrum, navigateToMeeting: {
+                        // Trigger for MeetingView
+                        activeMeetingScrumID = scrum.id
+                    }, navigateToDetail: {
+                        // Trigger navigation to DetailView
+                        selectedScrumID = scrum.id
+                    })
                 }
                 .listRowBackground(scrum.color)
+                .onTapGesture {
+                    // This is to ensure the tap on the CardView (except the button) navigates to DetailView
+                    selectedScrumID = scrum.id
+                }
             }
         }
         .navigationTitle("Goal Tracking")
@@ -47,6 +63,17 @@ struct ScrumsView: View {
         }
         .onChange(of: scenePhase) { phase in
             if phase == .inactive { saveAction() }
+        }
+        .sheet(isPresented: Binding<Bool>(
+            get: { self.activeMeetingScrumID != nil },
+            set: { _ in self.activeMeetingScrumID = nil }
+        )) {
+            // Assuming MeetingView requires a scrum to initialize
+            if let activeMeetingScrumID = activeMeetingScrumID, let scrum = scrums.first(where: { $0.id == activeMeetingScrumID }) {
+                MeetingView(scrum: binding(for: scrum))
+            } else {
+                Text("Error: Scrum not found.")
+            }
         }
     }
 
