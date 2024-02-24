@@ -20,18 +20,20 @@ struct ScrumsView: View {
         List {
             ForEach(scrums) { scrum in
                 ZStack {
-                    CardView(scrum: scrum, navigateToMeeting: {
-                        activeMeetingScrumID = scrum.id
-                    }, navigateToDetail: {
-                        selectedScrumID = scrum.id
-                        isPresented = true
-                    })
+                    NavigationLink(destination: DetailView(scrum: binding(for: scrum)), tag: scrum.id, selection: $selectedScrumID){
+                        CardView(scrum: scrum, navigateToMeeting: {
+                            activeMeetingScrumID = scrum.id
+                        }, navigateToDetail: {
+                            selectedScrumID = scrum.id
+//                            isPresented = true
+                        })
+                    }
                 }
                 .listRowBackground(scrum.color) // should later change based on category
-                .onTapGesture {
-                    selectedScrumID = scrum.id
-                    isPresented = true
-                }
+//                .onTapGesture {
+//                    selectedScrumID = scrum.id
+//                    isPresented = true
+//                }
             }
         }
         // Toolbar Title
