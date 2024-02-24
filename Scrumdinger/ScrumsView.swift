@@ -19,24 +19,23 @@ struct ScrumsView: View {
         List {
             ForEach(scrums) { scrum in
                 ZStack {
-                    NavigationLink(destination: DetailView(scrum: binding(for: scrum)), tag: scrum.id, selection: $selectedScrumID) {
-                        EmptyView()
-                    }
-                    .opacity(0)
-                    .buttonStyle(PlainButtonStyle())
-
+//                    NavigationLink(destination: DetailView(scrum: binding(for: scrum)), tag: scrum.id, selection: $selectedScrumID) {
+//                        EmptyView()
+//                    }
+//                    .opacity(0)
+//                    .buttonStyle(PlainButtonStyle())
                     CardView(scrum: scrum, navigateToMeeting: {
-                        // Trigger for MeetingView
                         activeMeetingScrumID = scrum.id
                     }, navigateToDetail: {
-                        // Trigger navigation to DetailView
                         selectedScrumID = scrum.id
+                        isPresented = true // Use the existing sheet presentation for EditView
                     })
                 }
-                .listRowBackground(scrum.color)
+                .listRowBackground(scrum.color) // should later change based on category
                 .onTapGesture {
-                    // This is to ensure the tap on the CardView (except the button) navigates to DetailView
+                    // This is to ensure the tap on the CardView (except the button) navigates to EditView
                     selectedScrumID = scrum.id
+                    isPresented = true
                 }
             }
         }
@@ -64,24 +63,25 @@ struct ScrumsView: View {
         
         // For Toolbar right item: add a new timer
         .sheet(isPresented: $isPresented) {
-            NavigationView {
-                EditView(scrumData: $newScrumData)
-                    .navigationBarItems(leading: Button("Dismiss") {
-                        isPresented = false
-                    }, trailing: Button("Add") {
-                        let newScrum = DailyScrum(title: newScrumData.title, attendees: newScrumData.attendees,
-                                                  lengthInMinutes: Int(newScrumData.lengthInMinutes), color: newScrumData.color,
-                                                  lengthInHours: Int(newScrumData.lengthInHours),
-                                                  progressHours: Int(newScrumData.progressHours),
-                                                  category: newScrumData.category)
-                        scrums.append(newScrum)
-                        isPresented = false
-                    })
+            // Check if we have a selectedScrumID and fetch the corresponding DailyScrum
+            if var selectedScrumID = selectedScrumID, let scrumIndex = scrums.firstIndex(where: { $0.id == selectedScrumID }) {
+                NavigationView {
+                    EditView(scrumData: $newScrumData)
+                        .navigationBarItems(leading: Button("Dismiss") {
+                            isPresented = false
+
+                        }, trailing: Button("Save") {
+                            isPresented = false
+
+                        })
+                }
+            } else {
+                // Fallback content in case no scrum is selected or found
+                Text("Error: Scrum not found or not selected.")
             }
         }
         
 
-        
         .onChange(of: scenePhase) { phase in
             if phase == .inactive { saveAction() }
         }
@@ -89,7 +89,6 @@ struct ScrumsView: View {
             get: { self.activeMeetingScrumID != nil },
             set: { _ in self.activeMeetingScrumID = nil }
         )) {
-            // Assuming MeetingView requires a scrum to initialize
             if let activeMeetingScrumID = activeMeetingScrumID, let scrum = scrums.first(where: { $0.id == activeMeetingScrumID }) {
                 MeetingView(scrum: binding(for: scrum))
             } else {
