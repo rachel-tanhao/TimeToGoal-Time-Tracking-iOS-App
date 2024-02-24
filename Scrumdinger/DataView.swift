@@ -29,7 +29,7 @@ struct DataView: View {
                                 Text(task.name)
                                     .font(.headline)
                                 
-                                Text("Expected: \(Double(task.targetTime), specifier: "%.1f") hrs")
+                                Text("Expected: \(task.targetTime) hrs")
                                     .font(.subheadline)
                                 
                                 Text("Invested: \(Double(task.accumTime) / 60, specifier: "%.1f") hrs")
