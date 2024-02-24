@@ -34,7 +34,7 @@ struct CardView: View {
                 Image(systemName: "play.fill")
                     .foregroundColor(.white)
                     .padding(12)
-                    .background(Color.green)
+                    .background(Color(red: 64/255, green: 162/255, blue: 216/255)) // Custom RGB color
                     .cornerRadius(17)
             }
             .buttonStyle(PlainButtonStyle())

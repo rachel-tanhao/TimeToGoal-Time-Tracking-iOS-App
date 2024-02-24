@@ -27,7 +27,7 @@ struct ScrumsView: View {
                         isPresented = true
                     })
                 }
-                .listRowBackground(scrum.color) // should later change based on category
+                .listRowBackground(scrum.color)
                 .onTapGesture {
                     selectedScrumID = scrum.id
                     isPresented = true
