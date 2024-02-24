@@ -6,35 +6,47 @@ import SwiftUI
 
 struct CardView: View {
     let scrum: DailyScrum
+    var navigateToMeeting: () -> Void
+    var navigateToDetail: () -> Void
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(scrum.title)
-                .font(.headline)
-            Spacer()
-            HStack {
-                Label("\(scrum.attendees.count)", systemImage: "person.3")
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(Text("Attendees"))
-                    .accessibilityValue(Text("\(scrum.attendees.count)"))
+        HStack() {
+            VStack(alignment: .leading) {
+                Text(scrum.title)
+                    .font(.headline)
                 Spacer()
-                Label("\(scrum.lengthInMinutes)", systemImage: "clock")
-                    .padding(.trailing, 20)
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(Text("Meeting length"))
-                    .accessibilityValue(Text("\(scrum.lengthInMinutes) minutes"))
+                HStack {
+                    Label("\(scrum.attendees.count)", systemImage: "person.3")
+                    Spacer()
+                    Label("\(scrum.lengthInMinutes)", systemImage: "clock")
+                }
+                .font(.caption)
             }
-            .font(.caption)
+            .padding()
+            .contentShape(Rectangle())
+            .onTapGesture {
+                navigateToDetail()
+            }
+            
+            Button(action: navigateToMeeting) {
+                Image(systemName: "play.fill")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.green)
+                    .cornerRadius(15)
+            }
+            .buttonStyle(PlainButtonStyle())
         }
-        .padding()
         .foregroundColor(scrum.color.accessibleFontColor)
+        .background(scrum.color)
     }
 }
+
 
 struct CardView_Previews: PreviewProvider {
     static var scrum = DailyScrum.data[0]
     static var previews: some View {
-        CardView(scrum: scrum)
-            .background(scrum.color)
+        CardView(scrum: scrum, navigateToMeeting: {}, navigateToDetail: {})
             .previewLayout(.fixed(width: 400, height: 60))
     }
 }
