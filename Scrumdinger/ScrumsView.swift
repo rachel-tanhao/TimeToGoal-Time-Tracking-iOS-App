@@ -1,5 +1,5 @@
 /*
- 目标追踪主页面板
+ 任务面板
  */
 
 import SwiftUI
@@ -11,6 +11,7 @@ struct ScrumsView: View {
     @State private var newScrumData = DailyScrum.Data()
     @State private var activeMeetingScrumID: DailyScrum.ID? = nil
     @State private var selectedScrumID: DailyScrum.ID? = nil // For DetailView navigation
+    @State private var isDataViewPresented = false // for DataView navigation
 
     let saveAction: () -> Void
     
@@ -39,12 +40,29 @@ struct ScrumsView: View {
                 }
             }
         }
-        .navigationTitle("Goal Tracking")
-        .navigationBarItems(trailing: Button(action: {
-            isPresented = true
-        }) {
-            Image(systemName: "plus")
-        })
+        // Toolbar Title
+        .navigationTitle("Time to Goal")
+        .toolbar {
+            // Toolbar left item
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    isDataViewPresented = true // This should trigger DataView presentation
+                }) {Text("🎯 My goals")}
+            }
+            // Toolbar right item
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    isPresented = true // This triggers the EditView presentation
+                }) {Image(systemName: "plus")}
+            }
+        }
+        
+        // For Toolbar left item: show DataView
+        .sheet(isPresented: $isDataViewPresented) {
+            // DataView() // Pass any required parameters or bindings
+        }
+        
+        // For Toolbar right item: add a new timer
         .sheet(isPresented: $isPresented) {
             NavigationView {
                 EditView(scrumData: $newScrumData)
@@ -61,6 +79,9 @@ struct ScrumsView: View {
                     })
             }
         }
+        
+
+        
         .onChange(of: scenePhase) { phase in
             if phase == .inactive { saveAction() }
         }
