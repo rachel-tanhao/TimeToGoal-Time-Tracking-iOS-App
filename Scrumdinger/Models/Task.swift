@@ -93,6 +93,14 @@ class Task: Identifiable, Codable {
             save() // Assuming you have a method to persist changes
         }
     }
+    
+    
+    func deleteTask(_ task: Task) {
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks.remove(at: index)
+            save() // Save changes if necessary
+        }
+    }
 
 }
 
