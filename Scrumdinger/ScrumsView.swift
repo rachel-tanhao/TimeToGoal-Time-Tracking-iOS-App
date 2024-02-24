@@ -7,6 +7,7 @@ import SwiftUI
 struct ScrumsView: View {
     @Binding var scrums: [DailyScrum]
     @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject var taskList: TaskList
     @State private var isPresented = false
     @State private var newScrumData = DailyScrum.Data()
     @State private var activeMeetingScrumID: DailyScrum.ID? = nil
@@ -19,21 +20,15 @@ struct ScrumsView: View {
         List {
             ForEach(scrums) { scrum in
                 ZStack {
-//                    NavigationLink(destination: DetailView(scrum: binding(for: scrum)), tag: scrum.id, selection: $selectedScrumID) {
-//                        EmptyView()
-//                    }
-//                    .opacity(0)
-//                    .buttonStyle(PlainButtonStyle())
                     CardView(scrum: scrum, navigateToMeeting: {
                         activeMeetingScrumID = scrum.id
                     }, navigateToDetail: {
                         selectedScrumID = scrum.id
-                        isPresented = true // Use the existing sheet presentation for EditView
+                        isPresented = true
                     })
                 }
                 .listRowBackground(scrum.color) // should later change based on category
                 .onTapGesture {
-                    // This is to ensure the tap on the CardView (except the button) navigates to EditView
                     selectedScrumID = scrum.id
                     isPresented = true
                 }
@@ -45,13 +40,13 @@ struct ScrumsView: View {
             // Toolbar left item
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    isDataViewPresented = true // This should trigger DataView presentation
+                    isDataViewPresented = true
                 }) {Text("🎯 My goals")}
             }
             // Toolbar right item
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    isPresented = true // This triggers the EditView presentation
+                    isPresented = true
                 }) {Image(systemName: "plus")}
             }
         }
@@ -63,21 +58,22 @@ struct ScrumsView: View {
         
         // For Toolbar right item: add a new timer
         .sheet(isPresented: $isPresented) {
-            // Check if we have a selectedScrumID and fetch the corresponding DailyScrum
-            if var selectedScrumID = selectedScrumID, let scrumIndex = scrums.firstIndex(where: { $0.id == selectedScrumID }) {
-                NavigationView {
-                    EditView(scrumData: $newScrumData)
-                        .navigationBarItems(leading: Button("Dismiss") {
-                            isPresented = false
+            NavigationView {
+                EditView(scrumData: $newScrumData, corrTaskId: $newScrumData.corrTaskId)
+                    .navigationBarItems(leading: Button("Dismiss") {
+                        isPresented = false
+                    }, trailing: Button("Add") {
+                        let newScrum = DailyScrum(title: newScrumData.title, attendees: newScrumData.attendees,
+                                                  lengthInMinutes: Int(newScrumData.lengthInMinutes), color: newScrumData.color,
+                                                  lengthInHours: Int(newScrumData.lengthInHours),
+                                                  progressHours: Int(newScrumData.progressHours),
+                                                  category: newScrumData.category,
+                                                  corrTaskId: newScrumData.corrTaskId
+                        )
+                        scrums.append(newScrum)
+                        isPresented = false
+                    })
 
-                        }, trailing: Button("Save") {
-                            isPresented = false
-
-                        })
-                }
-            } else {
-                // Fallback content in case no scrum is selected or found
-                Text("Error: Scrum not found or not selected.")
             }
         }
         
@@ -108,7 +104,7 @@ struct ScrumsView: View {
 struct ScrumsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ScrumsView(scrums: .constant(DailyScrum.data), saveAction: {})
+            ScrumsView(scrums: .constant(DailyScrum.data), saveAction: {}).environmentObject(TaskList.shared)
         }
     }
 }

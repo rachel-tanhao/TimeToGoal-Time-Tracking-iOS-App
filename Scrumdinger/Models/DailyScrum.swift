@@ -67,6 +67,7 @@ extension DailyScrum {
     }
 }
 
+
 extension DailyScrum {
     struct Data {
         var title: String = ""
@@ -94,3 +95,5 @@ extension DailyScrum {
         corrTaskId = data.corrTaskId
     }
 }
+
+

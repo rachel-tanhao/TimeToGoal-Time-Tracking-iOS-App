@@ -2,32 +2,16 @@ import SwiftUI
 
 struct EditView: View {
     @Binding var scrumData: DailyScrum.Data
-    @State private var selectedType: String = "work" // Temporary state
-    let types = ["work", "health", "study", "custom"] // should come from backend
-    @State private var customType: String = "" // State for custom type input
-    
-    // Define a method to get color based on type
-    private func colorForType(type: String) -> Color {
-        switch type {
-        case "work":
-            return Color.blue // Assuming blue is the color for work
-        case "health":
-            return Color.green // Assuming green is the color for health
-        case "study":
-            return Color.yellow // Assuming yellow is the color for study
-        case "custom":
-            return Color.purple // Assuming purple is the color for custom
-        default:
-            return Color.gray // Default color
-        }
-    }
-    
+    @ObservedObject var taskList = TaskList.shared // Use your shared TaskList
+    @Binding var corrTaskId: UUID? // Binding to the Scrum's corrTaskId
+    @State private var showingTaskCreation = false // To show/hide task creation sheet
+
     var body: some View {
         List {
-            Section(header: Text("Meeting Info")) {
+            Section(header: Text("Time To Goal")) {
                 TextField("Title", text: $scrumData.title)
                 HStack {
-                    Slider(value: $scrumData.lengthInHours, in: 1...30, step: 1.0) {
+                    Slider(value: $scrumData.lengthInHours, in: 1...8, step: 1.0) {
                         Text("Length")
                     }
                     .accessibilityValue(Text("\(Int(scrumData.lengthInHours)) hours"))
@@ -35,18 +19,34 @@ struct EditView: View {
                     Text("\(Int(scrumData.lengthInHours)) hours")
                         .accessibilityHidden(true)
                 }
-                Picker("Type", selection: $selectedType) {
-                    ForEach(types, id: \.self) { type in
-                        Text(type.capitalized)
-                            .foregroundColor(colorForType(type: type)) // Set text color based on type
+                ColorPicker("Color", selection: $scrumData.color)
+                    .accessibilityLabel(Text("Color picker"))
+
+            }
+
+            Section(header: Text("Select Task")) {
+                ForEach(taskList.tasks) { task in
+                    Button(action: {
+                        self.corrTaskId = task.id
+                    }) {
+                        HStack {
+                            Text(task.name)
+                            Spacer()
+                            if corrTaskId == task.id {
+                                Image(systemName: "checkmark")
+                            }
+                        }
                     }
                 }
-                // Add TextField for custom type input if "custom" is selected
-                if selectedType == "custom" {
-                    TextField("Custom Type", text: $customType)
-                        .foregroundColor(colorForType(type: "custom"))
+                Button("Create New Task") {
+                    self.showingTaskCreation = true
                 }
             }
+        }
+        .sheet(isPresented: $showingTaskCreation) {
+            TaskCreationView(isPresented: $showingTaskCreation, selectedTaskId: $corrTaskId)
+                .environmentObject(taskList)
+
         }
         .listStyle(InsetGroupedListStyle())
     }
@@ -54,6 +54,8 @@ struct EditView: View {
 
 struct EditView_Previews: PreviewProvider {
     static var previews: some View {
-        EditView(scrumData: .constant(DailyScrum.data[0].data))
+        EditView(scrumData: .constant(DailyScrum.data[0].data), corrTaskId: .constant(nil))
+            .environmentObject(TaskList.shared)
     }
 }
+
