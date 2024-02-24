@@ -10,14 +10,18 @@ struct DailyScrum: Identifiable, Codable {
     var lengthInMinutes: Int
     var color: Color
     var history: [History]
+    var durationInMinutes: Int = 0 // Added variable with default value of 0
+    var corrTaskId: UUID? // Added optional variable, default to nil
 
-    init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = []) {
+    init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = [], durationInMinutes: Int = 0, corrTaskId: UUID? = nil) {
         self.id = id
         self.title = title
         self.attendees = attendees
         self.lengthInMinutes = lengthInMinutes
         self.color = color
         self.history = history
+        self.durationInMinutes = durationInMinutes // Initialize with provided value or default
+        self.corrTaskId = corrTaskId // Initialize with provided value or nil
     }
 }
 

@@ -11,8 +11,8 @@ import SwiftUI
 struct ScrumsView: View {
     @Binding var scrums: [DailyScrum]
     @Environment(\.scenePhase) private var scenePhase
-    @State private var isPresented = false
-    @State private var newScrumData = DailyScrum.Data()
+    @State private var isPresented = false // is the sheet present? triggered by the "+" button
+    @State private var newScrumData = DailyScrum.Data() // this state varibale holds the data for a new scrum being created
     let saveAction: () -> Void
     var body: some View {
         List {
