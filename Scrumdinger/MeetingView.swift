@@ -18,9 +18,8 @@ struct MeetingView: View {
         ZStack {
             // background
             RoundedRectangle(cornerRadius: 16.0)
-                .fill(scrum.color)
-            
-            VStack {
+                .fill(Color(red: 193/255, green: 242/255, blue: 176/255))
+            VStack(spacing: 20){
                 MeetingHeaderView(secondsElapsed: scrumTimer.secondsElapsed, secondsRemaining: scrumTimer.secondsRemaining, scrumColor: scrum.color)
                 
                 MeetingTimerView(scrumColor: scrum.color, countTo: scrumTimer.secondsRemaining)
@@ -32,20 +31,11 @@ struct MeetingView: View {
         .padding()
         .foregroundColor(scrum.color.accessibleFontColor)
         .onAppear {
-            scrumTimer.reset(lengthInMinutes: scrum.lengthInMinutes, attendees: scrum.attendees)
-            scrumTimer.speakerChangedAction = {
-                player.seek(to: .zero)
-                player.play()
-            }
-            speechRecognizer.record(to: $transcript)
-            isRecording = true
-            scrumTimer.startScrum()
+            scrumTimer.reset(lengthInMinutes: scrum.lengthInMinutes)
         }
         .onDisappear {
             scrumTimer.stopScrum()
-            speechRecognizer.stopRecording()
-            isRecording = false
-            let newHistory = History(attendees: scrum.attendees, lengthInMinutes: scrumTimer.secondsElapsed / 60, transcript: transcript, lengthInHours: scrumTimer.secondsElapsed / 3600)
+            let newHistory = History(lengthInMinutes: scrumTimer.secondsElapsed / 60, lengthInHours: scrumTimer.secondsElapsed / 3600)
             scrum.history.insert(newHistory, at: 0)
         }
         .navigationBarTitleDisplayMode(.inline)

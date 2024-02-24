@@ -22,12 +22,12 @@ struct MeetingTimerView: View {
                         Circle().trim(from:0, to: progress())
                             .stroke(
                                 style: StrokeStyle(
-                                    lineWidth: 25,
+                                    lineWidth: 12,
                                     lineCap: .round,
                                     lineJoin:.round
                                 )
                             )
-                            .foregroundColor(scrumColor.accessibleFontColor)
+                            .foregroundColor(scrumColor)
                             .animation(
                                 .easeInOut(duration: 0.2)
                             )
