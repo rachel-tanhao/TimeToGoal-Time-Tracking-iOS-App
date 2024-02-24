@@ -18,7 +18,7 @@ struct DailyScrum: Identifiable, Codable {
 
     // CodingKeys enum to match the JSON keys
     enum CodingKeys: String, CodingKey {
-        case id, title, attendees, lengthInMinutes, color, history, lengthInHours,progressHours, category
+        case id, title, attendees, lengthInMinutes, color, history, lengthInHours,progressHours, category, corrTaskId
     }
     
     init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, color: Color, history: [History] = [], lengthInHours: Int, progressHours: Int, category:String, corrTaskId: UUID? = nil) {
