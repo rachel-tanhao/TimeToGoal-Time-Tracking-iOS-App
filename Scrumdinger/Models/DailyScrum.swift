@@ -50,6 +50,8 @@ struct DailyScrum: Identifiable, Codable {
             lengthInHours = try container.decodeIfPresent(Int.self, forKey: .lengthInHours) ?? lengthInMinutes / 60
             progressHours = try container.decodeIfPresent(Int.self, forKey: .progressHours) ?? 0
             category = try container.decode(String.self, forKey: .category)
+            corrTaskId = try container.decodeIfPresent(UUID.self, forKey: .corrTaskId)
+
         }
 }
 
