@@ -50,4 +50,10 @@ class ScrumData: ObservableObject {
             }
         }
     }
+    func deleteAllTasks() {
+            DispatchQueue.main.async { [weak self] in
+                self?.scrums = [] // Empty the tasks array
+                self?.save() // Persist the empty array to storage
+            }
+        }
 }
