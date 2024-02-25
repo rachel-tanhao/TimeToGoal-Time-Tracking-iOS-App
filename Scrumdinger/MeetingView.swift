@@ -5,14 +5,15 @@ struct MeetingView: View {
     @Binding var scrum: DailyScrum
     @StateObject var scrumTimer = ScrumTimer()
     @EnvironmentObject var taskList: TaskList
+
     @Environment(\.presentationMode) var presentationMode
+
 
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16.0)
                 .fill(Color(red: 255/255, green: 243/255, blue: 207/255))
-//                .fill(Color(red: 89/255, green: 180/255, blue: 195/255))
             
             GeometryReader { geometry in
                 VStack {
@@ -31,10 +32,12 @@ struct MeetingView: View {
                         scrumTimer.stopScrum()
                         let elapsedMinutes = scrumTimer.secondsElapsed
                         taskList.accumulateTime(taskId: scrum.corrTaskId, duration: elapsedMinutes)
+
 //                        NavigationLink(destination: ScrumsView(scrums: $scrum))
 //                        isClose.wrappedValue.dismiss()
                         // Dismiss the view
                            presentationMode.wrappedValue.dismiss()
+
                     }) {
                         Text("Stop")
                             .padding()
@@ -43,9 +46,11 @@ struct MeetingView: View {
                             .cornerRadius(8)
                     }
                     .padding(.bottom, 80) // Adds padding at the bottom of the button
-                    
+
                 }
             }
+            
+            
 
         }
         .padding()
