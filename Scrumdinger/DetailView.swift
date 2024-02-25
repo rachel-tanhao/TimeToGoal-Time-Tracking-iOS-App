@@ -13,13 +13,6 @@ struct DetailView: View {
     var body: some View {
         List {
             Section(header: Text("My Goal")) {
-                NavigationLink(
-                    destination: MeetingView(scrum: $scrum)) {
-                        Label("Let's Go", systemImage: "timer")
-                            .font(.headline)
-                            .foregroundColor(.accentColor)
-                            .accessibilityLabel(Text("Start meeting"))
-                    }
                 HStack {
                     Label("Target Hours", systemImage: "clock")
                         .accessibilityLabel(Text("Meeting length"))
