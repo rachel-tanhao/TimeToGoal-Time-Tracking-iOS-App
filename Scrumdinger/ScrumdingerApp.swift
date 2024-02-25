@@ -16,6 +16,7 @@ struct ScrumdingerApp: App {
             }
             .onAppear {
                 data.load()
+                
             }
             .environmentObject(TaskList.shared)
         }
