@@ -89,7 +89,7 @@ struct EmojiButton: View {
 
 struct EmojiPickerView: View {
     @Binding var selectedEmoji: String
-    let emojis = ["🎯", "🏀", "📚", "🧗‍♀️", "🔥", "🎉", "👩‍💻", "💼", "💐", "🍵", "🍕", "🏃‍♀️"]
+    let emojis = ["👩‍💻", "🏀", "📚", "🧗‍♀️", "🔥", "🎉", "💼", "😴","💐", "🍵", "💃", "🏃‍♀️"]
     
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: 10) {
