@@ -78,7 +78,15 @@ class Task: Identifiable, Codable {
         return tasks
     }
     
-    
+    func accumulateTime(taskId: UUID?, duration: Int) {
+        if taskId == nil {
+            return
+        }
+        if let index = tasks.firstIndex(where: { $0.id == taskId }) {
+            tasks[index].accumTime += duration
+            save()
+        }
+    }
     
     func save() {
         if let encoded = try? JSONEncoder().encode(tasks) {

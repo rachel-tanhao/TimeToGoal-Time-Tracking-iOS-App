@@ -4,6 +4,9 @@ import AVFoundation
 struct MeetingView: View {
     @Binding var scrum: DailyScrum
     @StateObject var scrumTimer = ScrumTimer()
+    @EnvironmentObject var taskList: TaskList
+    @Environment(\.presentationMode) var presentationMode
+
     
     var body: some View {
         ZStack {
@@ -23,6 +26,24 @@ struct MeetingView: View {
                         .frame(width: geometry.size.width, height: geometry.size.height / 2, alignment: .center) // Centers the timer view
                     
                     Spacer() // This will push everything above it towards the top
+                    
+                    Button(action: {
+                        scrumTimer.stopScrum()
+                        let elapsedMinutes = scrumTimer.secondsElapsed
+                        taskList.accumulateTime(taskId: scrum.corrTaskId, duration: elapsedMinutes)
+//                        NavigationLink(destination: ScrumsView(scrums: $scrum))
+//                        isClose.wrappedValue.dismiss()
+                        // Dismiss the view
+                           presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Stop")
+                            .padding()
+                            .background(Color(red: 99/255, green: 122/255, blue: 159/255))
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                    .padding(.bottom, 80) // Adds padding at the bottom of the button
+                    
                 }
             }
 
@@ -45,5 +66,6 @@ struct MeetingView: View {
 struct MeetingView_Previews: PreviewProvider {
     static var previews: some View {
         MeetingView(scrum: .constant(DailyScrum.data[0]))
+            .environmentObject(TaskList.shared)
     }
 }
