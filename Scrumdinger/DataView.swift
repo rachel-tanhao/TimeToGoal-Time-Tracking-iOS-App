@@ -32,11 +32,13 @@ struct DataView: View {
                                 Text("Expected: \(task.targetTime) hrs")
                                     .font(.subheadline)
                                 
-                                Text("Invested: \(Double(task.accumTime) / 60, specifier: "%.1f") hrs")
+                                Text("Invested: \(Double(task.accumTime) / 60, specifier: "%.2f") hrs")
                                     .font(.subheadline)
                                 
-                                Text("Progress: \(Double(task.accumTime) / Double(task.targetTime) * 100, specifier: "%.0f")%")
-                                    .font(.subheadline)
+                                // Calculate progress and ensure it does not exceed 100%
+                                let progressPercentage = task.accumTime == 0 ? 0 : min(Double(task.accumTime) / Double(task.targetTime * 60) * 100, 100)
+                                Text("Progress: \(progressPercentage, specifier: "%.0f")%")
+                                        .font(.subheadline)
                             }
                             .padding()
                             .background(Color.orange.opacity(0.2))

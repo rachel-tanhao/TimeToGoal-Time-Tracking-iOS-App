@@ -30,7 +30,7 @@ struct MeetingView: View {
                     
                     Button(action: {
                         scrumTimer.stopScrum()
-                        let elapsedMinutes = scrumTimer.secondsElapsed
+                        let elapsedMinutes = scrumTimer.secondsElapsed / 60
                         taskList.accumulateTime(taskId: scrum.corrTaskId, duration: elapsedMinutes)
 
 //                        NavigationLink(destination: ScrumsView(scrums: $scrum))
