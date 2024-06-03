@@ -18,15 +18,15 @@ Designed to shift focus from daily tasks to long-term achievements, TimeToGoal c
 
 ## 🎥 Demo
 
-**Forward Planning: Add TODOs to Your List:**
+**Forward Planning: Add TODOs to Your List**
 
 ![Add TODOs to Your List](demo_resources/add_todos.gif)
 
-**Ongoing: Start Working with a Focus Timer:**
+**Ongoing: Start Working with a Focus Timer**
 
 ![Start Working with a Focus Timer](demo_resources/start_task.gif)
 
-**Backward Tracking: Track Your Progress with Long-term Goal:**
+**Backward Tracking: Track Your Progress with Long-term Goal**
 
 _End the timer when you finish with your task and check how it contributes to your long-term goal._
 
@@ -56,7 +56,7 @@ Our vision was to develop a tool that promotes long-term dedication towards goal
 
 We embarked on this project with no prior mobile app development experience, learning Swift and Xcode from scratch in a single day. Our development process was a rapid educational journey, involving everything from setting up our project on GitHub to mastering the nuances of app design, such as creating and linking Views and managing data flow seamlessly within the app.
 
-We finally won the Best Beginner Prize @FemmeHack 2024. Cheer for the girls! 🎉🎉
+We finally won the Best Beginner Prize @FemmeHack 2024. Cheer for the girls! 🎉
 
 ## 🌟 Contributors
 
