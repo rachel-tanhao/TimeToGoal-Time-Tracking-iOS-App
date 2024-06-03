@@ -10,8 +10,6 @@ Designed to shift focus from daily tasks to long-term achievements, TimeToGoal c
 
 **Winner of the Best Beginner Hack @FemmeHack 2024** 🏅
 
----
-
 ## ✨ Key Features
 
 - **Make Plans with TODO List**: Add TODOs to your list.
