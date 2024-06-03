@@ -18,34 +18,42 @@ Designed to shift focus from daily tasks to long-term achievements, TimeToGoal c
 
 ## 🎥 Demo
 
-Add TODOs to Your List:
+**Add TODOs to Your List:**
+
 ![Add TODOs to Your List](demo_resources/add_todos.gif)
-Start Working with a Focus Timer:
+
+**Start Working with a Focus Timer:**
+
 ![Start Working with a Focus Timer](demo_resources/start_task.gif)
-Progress Monitoring:
+
+**Progress Monitoring:**
 _End the timer when you finish with your task and check how it contributes to your long-term goal._
+
 ![Progress Monitoring](demo_resources/check_your_progress.gif)
 
 ## 🛠️ Project Structure
 
-As shown in the diagram below, the project consists of three main parts:
+The project consists of three main parts, each color-coded for clarity:
 
 1. **DailyScrum**: Short-term to-dos that users can add to their lists (Green).
 2. **Timer**: The focus timer associated with each to-do item, created each time a user starts working on a to-do item (Yellow).
 3. **Task**: Long-term goals with accumulated time (Blue).
 
-Detailed annotation of each class and their relationships can be found in the diagram.
-Note: Deep colors represent views, while shallow colors represent associated objects.
+In the diagram below:
+- **Deep colors** represent views, which are the user interface components.
+- **Shallow colors** represent associated objects, which handle the data and logic.
+
+Detailed annotations of each class and their relationships can be found in the diagram.
 
 ![Project Structure Diagram](demo_resources/TimeToGoal_UML.png)
 
 ## 📘 Story
 
-TimeToGoal was created to address a gap in the market: the need for a time-management tool that alleviates stress rather than induces it. After testing over 20 task-management apps, we realized most of them focused on short-term achievements and made daily failures feel personal. They overwhelmed users with daunting task lists and fostered unrealistic expectations.
+TimeToGoal was created to address a gap in the market: existing time-management tools often induce stress rather than alleviating it. Most focus on short-term achievements, which can overwhelm users. 
 
-We envisioned TimeToGoal as a tool to encourage long-term dedication towards goals, making the process more manageable and less stressful, especially for those who struggle with ADHD. Our app shifts the focus from daily tasks to achieving long-term goals.
+Our vision was to develop a tool that promotes long-term dedication towards goals, making the process more manageable and less stressful, especially for those who struggle with ADHD. TimeToGoal shifts the focus from daily tasks to achieving long-term goals.
 
-Embarking on this project without prior mobile app development experience, we challenged ourselves to learn Swift and Xcode from scratch in a single day. This rapid educational journey involved setting up our project on GitHub and mastering app design, including creating and linking Views and managing data flow seamlessly within the app.
+We embarked on this project with no prior mobile app development experience, learning Swift and Xcode from scratch in a single day. This journey involved setting up our project on GitHub and mastering app design, including creating and linking Views and managing data flow seamlessly within the app.
 
 ## 🌟 Contributors
 
