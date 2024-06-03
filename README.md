@@ -18,10 +18,13 @@ Designed to shift focus from daily tasks to long-term achievements, TimeToGoal c
 
 ## 🎥 Demo
 
+Add TODOs to Your List:
 ![Add TODOs to Your List](demo_resources/add_todos.gif)
+Start Working with a Focus Timer:
 ![Start Working with a Focus Timer](demo_resources/start_task.gif)
-![Progress Monitoring](demo_resources/check_your_progress.gif)
+Progress Monitoring:
 _End the timer when you finish with your task and check how it contributes to your long-term goal._
+![Progress Monitoring](demo_resources/check_your_progress.gif)
 
 ## 🛠️ Project Structure
 
